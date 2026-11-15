@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets\app.ico</ApplicationIcon>
+    <AssemblyName>TransparentTaskbar</AssemblyName>
+    <RootNamespace>TransparentTaskbar</RootNamespace>
+    <Version>1.0.0</Version>
+    <Authors>Rohit Singh + Gemini</Authors>
+    <Company>Rohit Singh Personal</Company>
+    <Product>TransparentTaskbar</Product>
+    <Copyright>Copyright © 2026 Rohit Singh + Gemini</Copyright>
+    <Description>Windows 10/11 Taskbar Transparency Tool</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\app.ico" />
+  </ItemGroup>
+
+</Project>
