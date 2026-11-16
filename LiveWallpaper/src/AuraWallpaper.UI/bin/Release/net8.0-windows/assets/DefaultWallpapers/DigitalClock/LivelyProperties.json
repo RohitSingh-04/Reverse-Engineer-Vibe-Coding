@@ -1,0 +1,12 @@
+{
+  "timeColor": {
+    "type": "color",
+    "value": "#38bdf8",
+    "text": "Time Text Color"
+  },
+  "showSeconds": {
+    "type": "checkbox",
+    "value": true,
+    "text": "Display Seconds"
+  }
+}

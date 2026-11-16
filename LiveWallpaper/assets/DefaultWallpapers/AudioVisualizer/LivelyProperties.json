@@ -1,0 +1,20 @@
+{
+  "barColor": {
+    "type": "color",
+    "value": "#38bdf8",
+    "text": "Spectrum Accent Color"
+  },
+  "barCount": {
+    "type": "slider",
+    "value": 48,
+    "min": 16,
+    "max": 64,
+    "step": 4,
+    "text": "Frequency Bar Count"
+  },
+  "glowEnabled": {
+    "type": "checkbox",
+    "value": true,
+    "text": "Enable Neon Glow Effect"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "Title": "Aura Pulse Audio Visualizer",
+  "Author": "Aura Team",
+  "Desc": "Dynamic responsive audio visualizer reacting to Windows system audio in real-time.",
+  "Version": "1.0.0",
+  "Type": 1,
+  "FileName": "index.html",
+  "Tags": ["audio", "visualizer", "reactive", "spectrum"]
+}

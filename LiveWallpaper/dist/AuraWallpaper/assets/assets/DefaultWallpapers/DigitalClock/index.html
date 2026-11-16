@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Aesthetic Digital Clock</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html {
+            width: 100%; height: 100%; overflow: hidden;
+            background: radial-gradient(circle at center, #1e1b4b 0%, #09090b 100%);
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            color: #ffffff;
+        }
+        .clock-card {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 28px;
+            padding: 50px 80px;
+            backdrop-filter: blur(24px);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+            transition: all 0.3s ease;
+        }
+        #time {
+            font-size: 88px;
+            font-weight: 200;
+            letter-spacing: 6px;
+            color: #38bdf8;
+            text-shadow: 0 0 30px rgba(56, 189, 248, 0.4);
+        }
+        #date {
+            font-size: 20px;
+            color: #94a3b8;
+            font-weight: 400;
+            margin-top: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="clock-card" id="card">
+        <div id="time">12:00:00</div>
+        <div id="date">Monday, November 7</div>
+    </div>
+    <script>
+        let timeColor = '#38bdf8';
+        let showSeconds = true;
+
+        window.auraPropertyListener = window.livelyPropertyListener = function(name, val) {
+            if (name === 'timeColor') {
+                timeColor = val;
+                document.getElementById('time').style.color = val;
+                document.getElementById('time').style.textShadow = `0 0 30px ${val}66`;
+            }
+            if (name === 'showSeconds') {
+                showSeconds = val === true || val === 'true';
+                updateTime();
+            }
+        };
+
+        function updateTime() {
+            const now = new Date();
+            const opts = { hour: '2-digit', minute: '2-digit', hour12: false };
+            if (showSeconds) opts.second = '2-digit';
+
+            document.getElementById('time').textContent = now.toLocaleTimeString([], opts);
+            document.getElementById('date').textContent = now.toLocaleDateString(undefined, {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+    </script>
+</body>
+</html>

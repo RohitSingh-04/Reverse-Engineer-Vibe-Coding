@@ -1,0 +1,15 @@
+{
+  "particleColor": {
+    "type": "color",
+    "value": "#a855f7",
+    "text": "Particle & Constellation Color"
+  },
+  "particleCount": {
+    "type": "slider",
+    "value": 100,
+    "min": 40,
+    "max": 200,
+    "step": 10,
+    "text": "Particle Density"
+  }
+}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Aura Audio Spectrum Visualizer</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background: #070913; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        canvas { display: block; width: 100%; height: 100%; }
+        .hud {
+            position: absolute;
+            bottom: 40px;
+            left: 50px;
+            color: #ffffff;
+            pointer-events: none;
+            user-select: none;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.8);
+        }
+        .hud h1 { font-size: 32px; font-weight: 300; letter-spacing: 3px; color: #f8fafc; }
+        .hud p { font-size: 13px; color: #38bdf8; margin-top: 4px; letter-spacing: 1.5px; }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    <div class="hud">
+        <h1 id="titleText">AURA PULSE</h1>
+        <p id="subText">REAL-TIME WASAPI AUDIO SPECTRUM</p>
+    </div>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        let spectrum = new Array(64).fill(0.04);
+        let barColor = '#38bdf8';
+        let barCount = 48;
+        let glowEnabled = true;
+
+        // Aura & Lively Audio Hook
+        window.auraAudioListener = window.livelyAudioListener = function(audioData) {
+            if (audioData && audioData.length) {
+                spectrum = audioData;
+            }
+        };
+
+        // Aura & Lively Dynamic Properties Hook
+        window.auraPropertyListener = window.livelyPropertyListener = function(name, val) {
+            if (name === 'barColor') barColor = val;
+            if (name === 'barCount') barCount = parseInt(val) || 48;
+            if (name === 'glowEnabled') glowEnabled = val === true || val === 'true';
+        };
+
+        function draw() {
+            ctx.fillStyle = 'rgba(7, 9, 19, 0.22)';
+            ctx.fillRect(0, 0, width, height);
+
+            const gap = 6;
+            const barWidth = (width - ((barCount + 1) * gap)) / barCount;
+            const baselineY = height * 0.72;
+
+            if (glowEnabled) {
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = barColor;
+            } else {
+                ctx.shadowBlur = 0;
+            }
+
+            for (let i = 0; i < barCount; i++) {
+                const sIdx = Math.floor((i / barCount) * spectrum.length);
+                const mag = Math.min(1.0, (spectrum[sIdx] || 0.04) * 1.4);
+                const barHeight = Math.max(8, mag * (height * 0.45));
+
+                const grad = ctx.createLinearGradient(0, baselineY - barHeight, 0, baselineY);
+                grad.addColorStop(0, '#f43f5e');
+                grad.addColorStop(0.5, barColor);
+                grad.addColorStop(1, '#6366f1');
+
+                ctx.fillStyle = grad;
+                ctx.beginPath();
+                ctx.roundRect(gap + i * (barWidth + gap), baselineY - barHeight, barWidth, barHeight, [4, 4, 0, 0]);
+                ctx.fill();
+            }
+
+            requestAnimationFrame(draw);
+        }
+        draw();
+    </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\src\AuraWallpaper.Core\bin\Debug\net8.0-windows\AuraWallpaper.Core.deps.json
+C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\src\AuraWallpaper.Core\bin\Debug\net8.0-windows\AuraWallpaper.Core.dll
+C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\src\AuraWallpaper.Core\bin\Debug\net8.0-windows\AuraWallpaper.Core.pdb
+C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\src\AuraWallpaper.Core\obj\Debug\net8.0-windows\AuraWallpaper.Core.csproj.AssemblyReference.cache
+C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\src\AuraWallpaper.Core\obj\Debug\net8.0-windows\AuraWallpaper.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\src\AuraWallpaper.Core\obj\Debug\net8.0-windows\AuraWallpaper.Core.AssemblyInfoInputs.cache
+C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\src\AuraWallpaper.Core\obj\Debug\net8.0-windows\AuraWallpaper.Core.AssemblyInfo.cs
+C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\src\AuraWallpaper.Core\obj\Debug\net8.0-windows\AuraWallpaper.Core.csproj.CoreCompileInputs.cache
+C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\src\AuraWallpaper.Core\obj\Debug\net8.0-windows\AuraWallpaper.Core.dll
+C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\src\AuraWallpaper.Core\obj\Debug\net8.0-windows\refint\AuraWallpaper.Core.dll
+C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\src\AuraWallpaper.Core\obj\Debug\net8.0-windows\AuraWallpaper.Core.pdb
+C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\src\AuraWallpaper.Core\obj\Debug\net8.0-windows\ref\AuraWallpaper.Core.dll

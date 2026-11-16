@@ -1,0 +1,21 @@
+<Window x:Class="AuraWallpaper.Player.Media.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Aura Media Player"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        ShowInTaskbar="False"
+        Background="Black">
+    <Grid Background="Black">
+        <!-- Video Player -->
+        <MediaElement x:Name="MediaPlayer"
+                      LoadedBehavior="Manual"
+                      UnloadedBehavior="Manual"
+                      ScrubbingEnabled="True"
+                      Visibility="Collapsed" />
+
+        <!-- Static Image / GIF Player -->
+        <Image x:Name="PicturePlayer"
+               Visibility="Collapsed" />
+    </Grid>
+</Window>

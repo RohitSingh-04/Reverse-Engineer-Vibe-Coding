@@ -1,0 +1,15 @@
+{
+  "rainColor": {
+    "type": "color",
+    "value": "#00ff66",
+    "text": "Code Rain Color"
+  },
+  "speed": {
+    "type": "slider",
+    "value": 33,
+    "min": 10,
+    "max": 80,
+    "step": 5,
+    "text": "Stream Falling Speed (ms)"
+  }
+}

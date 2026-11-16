@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <AssemblyName>AuraWallpaper</AssemblyName>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <LangVersion>12</LangVersion>
+    <Authors>Rohit Singh</Authors>
+    <Company>Rohit Singh Personal</Company>
+    <Product>Aura Live Wallpaper</Product>
+    <Description>Production-grade Windows Live Wallpaper &amp; Screensaver Platform built using Antigravity (Gemini 3.8 Flash).</Description>
+    <Copyright>Copyright © 2026 Rohit Singh. All rights reserved.</Copyright>
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <ApplicationIcon>..\..\assets\app.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.2903.40" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AuraWallpaper.Core\AuraWallpaper.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\..\assets\**" CopyToOutputDirectory="PreserveNewest" LinkBase="assets" />
+    <Resource Include="..\..\assets\app.ico" Link="assets\app.ico" />
+    <Resource Include="..\..\assets\app.png" Link="assets\app.png" />
+  </ItemGroup>
+</Project>

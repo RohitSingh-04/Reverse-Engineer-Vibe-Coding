@@ -1,0 +1,84 @@
+<UserControl x:Class="AuraWallpaper.UI.Views.ActiveWallpapersView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:AuraWallpaper.UI.Controls"
+             Loaded="UserControl_Loaded">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="Active Wallpapers &amp; Displays" FontSize="26" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+            <TextBlock Text="Live monitor control, individual volume levels, playback states, and wallpaper replacement." Foreground="{DynamicResource TextSecondary}" Margin="0,2,0,0"/>
+        </StackPanel>
+
+        <!-- Monitors & Active Wallpapers List -->
+        <Grid Grid.Row="1">
+            <ScrollViewer x:Name="MonitorsScrollViewer" VerticalScrollBarVisibility="Auto">
+                <ItemsControl x:Name="MonitorsItemsControl">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0,0,0,16" Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" CornerRadius="8" Padding="16">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Monitor Thumbnail / Visual Representation -->
+                                    <Border Grid.Column="0" Width="180" Height="110" Background="{DynamicResource SurfaceBackground}" BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" CornerRadius="6" ClipToBounds="True">
+                                        <Grid>
+                                            <Image Source="{Binding WallpaperThumbnail}" Stretch="UniformToFill"/>
+                                            <Border Background="#B3000000" VerticalAlignment="Bottom" Padding="6,4">
+                                                <TextBlock Text="{Binding ResolutionText}" Foreground="White" FontSize="11" HorizontalAlignment="Center"/>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+
+                                    <!-- Monitor & Wallpaper Info (Responsive & Ellipsis) -->
+                                    <Grid Grid.Column="1" Margin="20,0,20,0" VerticalAlignment="Center">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding MonitorName}" FontSize="17" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" TextTrimming="CharacterEllipsis"/>
+                                            <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                                <TextBlock Text="Active Wallpaper: " Foreground="{DynamicResource TextSecondary}" FontSize="13"/>
+                                                <TextBlock Text="{Binding WallpaperTitle}" Foreground="{DynamicResource AccentBlue}" FontWeight="Medium" FontSize="13" TextTrimming="CharacterEllipsis"/>
+                                            </StackPanel>
+                                            <TextBlock Text="{Binding StatusText}" Foreground="{DynamicResource TextMuted}" FontSize="12" Margin="0,4,0,0" TextTrimming="CharacterEllipsis"/>
+
+                                            <!-- Volume Slider -->
+                                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                                <TextBlock Text="Volume: " VerticalAlignment="Center" Foreground="{DynamicResource TextSecondary}" FontSize="12"/>
+                                                <Slider Width="130" Minimum="0" Maximum="100" Value="{Binding Volume}" Margin="8,0,8,0" VerticalAlignment="Center" ValueChanged="VolumeSlider_ValueChanged"/>
+                                                <TextBlock Text="{Binding VolumeText}" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondary}" Width="36" FontSize="12"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <!-- Actions (Non-Clipped Responsive Buttons) -->
+                                    <StackPanel Grid.Column="2" VerticalAlignment="Center" Orientation="Vertical" Width="160">
+                                        <Button Content="{Binding PlayPauseButtonText}" Height="34" Margin="0,0,0,8" Click="PlayPauseButton_Click"
+                                                Background="{DynamicResource AccentBlue}" Foreground="White" FontWeight="SemiBold" BorderThickness="0" Cursor="Hand"/>
+                                        <Button Content="🔄 Change Wallpaper" Height="34" Margin="0,0,0,8" Click="ChangeButton_Click"
+                                                Background="{DynamicResource ButtonBackground}" Foreground="{DynamicResource TextPrimary}" BorderBrush="{DynamicResource ButtonBorder}" BorderThickness="1" Cursor="Hand"/>
+                                        <Button Content="✕ Close Wallpaper" Height="34" Click="CloseButton_Click"
+                                                Background="#3D2020" Foreground="#FFA0A0" BorderThickness="0" Cursor="Hand"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <!-- ChatGPT-Style Floating Scroll Navigator -->
+            <controls:ScrollNavigator TargetScrollViewer="{Binding ElementName=MonitorsScrollViewer}"
+                                      HorizontalAlignment="Right"
+                                      VerticalAlignment="Bottom"
+                                      Margin="0,0,16,16"/>
+        </Grid>
+    </Grid>
+</UserControl>

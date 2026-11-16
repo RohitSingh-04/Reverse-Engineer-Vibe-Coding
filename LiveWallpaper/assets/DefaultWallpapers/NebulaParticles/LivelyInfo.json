@@ -1,0 +1,9 @@
+{
+  "Title": "Deep Space Nebula Particles",
+  "Author": "Aura Team",
+  "Desc": "Cosmic particle constellation reacting fluidly to cursor movements.",
+  "Version": "1.0.0",
+  "Type": 1,
+  "FileName": "index.html",
+  "Tags": ["space", "particles", "interactive", "constellation"]
+}

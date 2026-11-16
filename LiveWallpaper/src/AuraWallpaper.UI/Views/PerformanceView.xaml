@@ -1,0 +1,129 @@
+<UserControl x:Class="AuraWallpaper.UI.Views.PerformanceView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:AuraWallpaper.UI.Controls"
+             Loaded="UserControl_Loaded">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="Performance &amp; Resource Management" FontSize="26" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+            <TextBlock Text="Intelligent auto-pause rules, power-saving profiles, and per-application gaming optimization." Foreground="{DynamicResource TextSecondary}" Margin="0,2,0,0"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <ScrollViewer x:Name="PerformanceScrollViewer" VerticalScrollBarVisibility="Auto">
+                <StackPanel MaxWidth="720" HorizontalAlignment="Left">
+                    <!-- Live Resource Dashboard -->
+                    <Border Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" CornerRadius="8" Padding="20" Margin="0,0,0,16">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="CPU Utilization" Foreground="{DynamicResource TextSecondary}" FontSize="12"/>
+                                <TextBlock x:Name="CpuText" Text="0.0 %" FontSize="22" FontWeight="Bold" Foreground="{DynamicResource AccentBlue}" Margin="0,4,0,0"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="Aura Memory Usage" Foreground="{DynamicResource TextSecondary}" FontSize="12"/>
+                                <TextBlock x:Name="MemoryText" Text="0 MB" FontSize="22" FontWeight="Bold" Foreground="#00CC6A" Margin="0,4,0,0"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="Active Renderers" Foreground="{DynamicResource TextSecondary}" FontSize="12"/>
+                                <TextBlock x:Name="RenderersText" Text="0 Process(es)" FontSize="22" FontWeight="Bold" Foreground="#FFB900" Margin="0,4,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Automatic Playback Rules Card -->
+                    <Border Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" CornerRadius="8" Padding="20" Margin="0,0,0,16">
+                        <StackPanel>
+                            <TextBlock Text="Automatic Playback Rules" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" Margin="0,0,0,16"/>
+
+                            <!-- Fullscreen behavior -->
+                            <Grid Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="When Another Application is Fullscreen" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+                                    <TextBlock Text="Pauses wallpaper rendering to release 100% GPU/CPU for games and media." Foreground="{DynamicResource TextSecondary}" FontSize="12"/>
+                                </StackPanel>
+                                <ComboBox x:Name="FullscreenCombo" Grid.Column="1" Width="180" Height="34" SelectionChanged="FullscreenCombo_SelectionChanged">
+                                    <ComboBoxItem Content="Pause (Recommended)"/>
+                                    <ComboBoxItem Content="Mute Audio"/>
+                                    <ComboBoxItem Content="Continue Playing"/>
+                                </ComboBox>
+                            </Grid>
+
+                            <!-- Battery power behavior -->
+                            <Grid Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock Text="When Running on Battery" FontWeight="Medium" Foreground="{DynamicResource TextPrimary}"/>
+                                    <TextBlock Text="Automatically pauses live wallpapers when laptop unplugged or below threshold." Foreground="{DynamicResource TextSecondary}" FontSize="12"/>
+                                </StackPanel>
+                                <ComboBox x:Name="BatteryCombo" Grid.Column="1" Width="180" Height="34" SelectionChanged="BatteryCombo_SelectionChanged">
+                                    <ComboBoxItem Content="Pause on Battery"/>
+                                    <ComboBoxItem Content="Pause below 20%"/>
+                                    <ComboBoxItem Content="Continue Playing"/>
+                                </ComboBox>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Per-Application Rules Card -->
+                    <Border Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" CornerRadius="8" Padding="20">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,12">
+                                <TextBlock Text="Per-Application Optimization Rules" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                                <Button Content="+ Add Application Rule" HorizontalAlignment="Right" Width="170" Height="30" Click="AddRuleButton_Click"
+                                        Background="{DynamicResource ButtonBackground}" Foreground="{DynamicResource TextPrimary}" BorderBrush="{DynamicResource ButtonBorder}" Cursor="Hand"/>
+                            </Grid>
+                            <TextBlock Text="Override wallpaper behavior when specific processes (e.g. game.exe, photoshop.exe) are running." Foreground="{DynamicResource TextSecondary}" FontSize="12" Margin="0,0,0,12"/>
+
+                            <!-- Rules List -->
+                            <Border Background="{DynamicResource SurfaceBackground}" BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" CornerRadius="4" MinHeight="100">
+                                <ListBox x:Name="RulesListBox" Background="Transparent" BorderThickness="0">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="4">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Text="{Binding ProcessName}" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                                                <TextBlock Grid.Column="1" Text="{Binding Rule}" Foreground="{DynamicResource TextSecondary}" Margin="16,0,16,0" VerticalAlignment="Center"/>
+                                                <Button Grid.Column="2" Content="Remove" Width="70" Height="24" Click="RemoveRuleButton_Click"
+                                                        Background="{DynamicResource ButtonBackground}" Foreground="{DynamicResource TextPrimary}" BorderBrush="{DynamicResource ButtonBorder}" Cursor="Hand"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- ChatGPT-Style Floating Scroll Navigator -->
+            <controls:ScrollNavigator TargetScrollViewer="{Binding ElementName=PerformanceScrollViewer}"
+                                      HorizontalAlignment="Right"
+                                      VerticalAlignment="Bottom"
+                                      Margin="0,0,16,16"/>
+        </Grid>
+    </Grid>
+</UserControl>

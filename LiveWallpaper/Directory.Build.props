@@ -1,0 +1,42 @@
+<Project>
+  <PropertyGroup>
+    <Authors>Rohit Singh</Authors>
+    <Company>Rohit Singh Personal</Company>
+    <Product>Aura Live Wallpaper</Product>
+    <Copyright>Copyright © 2026 Rohit Singh. All rights reserved.</Copyright>
+    <Description>Production-grade Windows Live Wallpaper &amp; Screensaver Platform built using Antigravity (Gemini 3.8 Flash).</Description>
+    <PackageProjectUrl>https://github.com/RohitSingh-04</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/RohitSingh-04</RepositoryUrl>
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <ApplicationIcon>$(MSBuildThisFileDirectory)assets\app.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>Author</_Parameter1>
+      <_Parameter2>Rohit Singh</_Parameter2>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>Developer</_Parameter1>
+      <_Parameter2>Rohit Singh</_Parameter2>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>Organization</_Parameter1>
+      <_Parameter2>Rohit Singh Personal</_Parameter2>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>GitHub</_Parameter1>
+      <_Parameter2>https://github.com/RohitSingh-04</_Parameter2>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>LinkedIn</_Parameter1>
+      <_Parameter2>https://linkedin.com/in/rohiyaa</_Parameter2>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Reflection.AssemblyMetadataAttribute">
+      <_Parameter1>BuiltUsing</_Parameter1>
+      <_Parameter2>Antigravity (Gemini 3.8 Flash)</_Parameter2>
+    </AssemblyAttribute>
+  </ItemGroup>
+</Project>
