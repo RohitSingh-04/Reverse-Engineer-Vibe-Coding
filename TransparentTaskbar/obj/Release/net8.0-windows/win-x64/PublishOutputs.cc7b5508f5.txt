@@ -1,0 +1,2 @@
+C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\TransparentTaskbar\publish\TransparentTaskbar.pdb
+C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\TransparentTaskbar\publish\TransparentTaskbar.exe
