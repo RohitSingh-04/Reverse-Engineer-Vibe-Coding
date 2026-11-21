@@ -37,11 +37,6 @@ namespace AuraWallpaper.Player.Media
             _isMuted = mute;
             _scaling = scale;
 
-            Left = x;
-            Top = y;
-            Width = w;
-            Height = h;
-
             SourceInitialized += OnSourceInitialized;
             Loaded += OnLoaded;
             Closed += OnClosed;
@@ -93,8 +88,6 @@ namespace AuraWallpaper.Player.Media
             else
             {
                 // Picture or GIF
-                PicturePlayer.Visibility = Visibility.Visible;
-                PicturePlayer.Stretch = stretchMode;
                 try
                 {
                     var bitmap = new BitmapImage();
@@ -102,6 +95,15 @@ namespace AuraWallpaper.Player.Media
                     bitmap.UriSource = new Uri(_filePath);
                     bitmap.CacheOption = BitmapCacheOption.OnLoad;
                     bitmap.EndInit();
+
+                    if (_scaling == WallpaperScaling.Fit)
+                    {
+                        AmbientPicturePlayer.Source = bitmap;
+                        AmbientPicturePlayer.Visibility = Visibility.Visible;
+                    }
+
+                    PicturePlayer.Visibility = Visibility.Visible;
+                    PicturePlayer.Stretch = stretchMode;
                     PicturePlayer.Source = bitmap;
                 }
                 catch

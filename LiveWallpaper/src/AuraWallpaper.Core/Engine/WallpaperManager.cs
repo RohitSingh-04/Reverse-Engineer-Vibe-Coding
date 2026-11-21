@@ -35,9 +35,15 @@ namespace AuraWallpaper.Core.Engine
         private bool _isMuted;
         private int _globalVolume = 80;
 
+        public bool IsSpanMode => _activeAssignments.ContainsKey(-1);
+        public bool IsDuplicateMode => _activeAssignments.Values.Any(a => a.Mode == AssignmentMode.Duplicate);
+        public MonitorAssignment? GetAssignment(int monitorIndex) => _activeAssignments.TryGetValue(monitorIndex, out var a) ? a : null;
+
         public event Action? AssignmentsChanged;
         public event Action? WindowShowRequested;
         public event Action? WindowHideRequested;
+        public event Action<string>? ViewNavigationRequested;
+        public void RequestViewNavigation(string viewName) => ViewNavigationRequested?.Invoke(viewName);
 
         private WallpaperManager()
         {
@@ -62,7 +68,7 @@ namespace AuraWallpaper.Core.Engine
 
         #region Core Wallpaper Lifecycle
 
-        public bool SetWallpaper(string wallpaperId, int monitorIndex = 0, AssignmentMode mode = AssignmentMode.PerMonitor)
+        public bool SetWallpaper(string wallpaperId, int monitorIndex = 0, AssignmentMode mode = AssignmentMode.PerMonitor, WallpaperScaling scaling = WallpaperScaling.Fill)
         {
             var wallpaper = AuraDatabase.Instance.GetWallpaperById(wallpaperId);
             if (wallpaper == null) return false;
@@ -78,6 +84,7 @@ namespace AuraWallpaper.Core.Engine
                 // Span single wallpaper across entire virtual screen
                 var vBounds = DisplayManager.Instance.GetVirtualScreenBounds();
                 CloseAllWallpapers();
+                AuraDatabase.Instance.ClearAllMonitorAssignments();
 
                 var assignment = new MonitorAssignment
                 {
@@ -88,7 +95,7 @@ namespace AuraWallpaper.Core.Engine
                     State = PlaybackState.Playing,
                     Volume = _globalVolume,
                     IsMuted = _isMuted,
-                    Scaling = WallpaperScaling.Span,
+                    Scaling = scaling,
                     AssignedAt = DateTime.UtcNow
                 };
 
@@ -102,22 +109,46 @@ namespace AuraWallpaper.Core.Engine
             if (mode == AssignmentMode.Duplicate)
             {
                 // Duplicate across all monitors
+                CloseAllWallpapers();
+                AuraDatabase.Instance.ClearAllMonitorAssignments();
                 for (int i = 0; i < monitors.Count; i++)
                 {
-                    SetSingleMonitorWallpaper(wallpaper, i, AssignmentMode.Duplicate);
+                    var mon = monitors[i];
+                    var assignment = new MonitorAssignment
+                    {
+                        MonitorDeviceId = mon.DeviceId,
+                        MonitorIndex = i,
+                        WallpaperId = wallpaper.Id,
+                        Mode = AssignmentMode.Duplicate,
+                        State = PlaybackState.Playing,
+                        Volume = _globalVolume,
+                        IsMuted = _isMuted,
+                        Scaling = scaling,
+                        AssignedAt = DateTime.UtcNow
+                    };
+
+                    LaunchPlayer(wallpaper, mon.Bounds.X, mon.Bounds.Y, mon.Bounds.Width, mon.Bounds.Height, i, assignment);
+                    _activeAssignments[i] = assignment;
+                    AuraDatabase.Instance.SaveMonitorAssignment(assignment);
                 }
                 AssignmentsChanged?.Invoke();
                 return true;
             }
 
-            // Per-monitor mode
+            // Per-monitor mode: if Span was running, close it first and clear SPAN_VIRTUAL in DB
+            if (_activeAssignments.ContainsKey(-1))
+            {
+                CloseWallpaper(-1);
+                AuraDatabase.Instance.ClearMonitorAssignment("SPAN_VIRTUAL");
+            }
+
             if (monitorIndex < 0 || monitorIndex >= monitors.Count) monitorIndex = 0;
-            bool result = SetSingleMonitorWallpaper(wallpaper, monitorIndex, AssignmentMode.PerMonitor);
+            bool result = SetSingleMonitorWallpaper(wallpaper, monitorIndex, AssignmentMode.PerMonitor, scaling);
             AssignmentsChanged?.Invoke();
             return result;
         }
 
-        private bool SetSingleMonitorWallpaper(WallpaperItem wallpaper, int monitorIndex, AssignmentMode mode)
+        private bool SetSingleMonitorWallpaper(WallpaperItem wallpaper, int monitorIndex, AssignmentMode mode, WallpaperScaling scaling = WallpaperScaling.Fill)
         {
             var monitors = DisplayManager.Instance.GetMonitors();
             if (monitorIndex < 0 || monitorIndex >= monitors.Count) return false;
@@ -134,7 +165,7 @@ namespace AuraWallpaper.Core.Engine
                 State = PlaybackState.Playing,
                 Volume = _globalVolume,
                 IsMuted = _isMuted,
-                Scaling = WallpaperScaling.Fill,
+                Scaling = scaling,
                 AssignedAt = DateTime.UtcNow
             };
 
@@ -160,18 +191,82 @@ namespace AuraWallpaper.Core.Engine
                 // Video wallpaper: route to AuraWallpaper.Player.Web with HTML5 video engine
                 // Ensures 100% GPU hardware acceleration, VP9/AV1/H.264 support, and zero DirectShow EVR glitches under WorkerW
                 string videoDir = Path.GetDirectoryName(wallpaper.FilePath) ?? "";
-                string indexHtml = Path.Combine(videoDir, "index.html");
-                if (!File.Exists(indexHtml))
+                string scaleMode = assignment.Scaling switch
                 {
-                    string fileName = Path.GetFileName(wallpaper.FilePath);
-                    string htmlContent = $@"<!DOCTYPE html>
+                    WallpaperScaling.Fit => "contain",
+                    WallpaperScaling.Stretch => "fill",
+                    WallpaperScaling.Center => "none",
+                    _ => "cover" // Fill / Span (Cropped)
+                };
+
+                string fileName = Path.GetFileName(wallpaper.FilePath);
+                string indexHtml = Path.Combine(videoDir, $"player_{assignment.Scaling.ToString().ToLowerInvariant()}.html");
+                string htmlContent;
+
+                if (assignment.Scaling == WallpaperScaling.Fit)
+                {
+                    // Ambient Frosted Glow Backdrop mode:
+                    // Main video preserves 100% aspect ratio (contain) centered
+                    // Background video fills full canvas with a blurred, saturated glow (cover + blur)
+                    htmlContent = $@"<!DOCTYPE html>
+<html>
+<head>
+  <meta charset=""utf-8"">
+  <style>
+    * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+    html, body {{ width: 100vw; height: 100vh; overflow: hidden; background: #000; position: relative; }}
+    .ambient-bg {{
+      position: absolute;
+      top: -10%; left: -10%;
+      width: 120vw; height: 120vh;
+      object-fit: cover;
+      filter: blur(50px) brightness(0.6) saturate(1.35);
+      z-index: 1;
+      transform: scale(1.08);
+      pointer-events: none;
+    }}
+    .main-video {{
+      position: absolute;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      object-fit: contain;
+      z-index: 2;
+      display: block;
+    }}
+  </style>
+</head>
+<body>
+  <video id=""bg"" class=""ambient-bg"" src=""./{fileName}"" autoplay loop muted playsinline aria-hidden=""true""></video>
+  <video id=""v"" class=""main-video"" src=""./{fileName}"" autoplay loop playsinline></video>
+  <script>
+    const v = document.getElementById('v');
+    const bg = document.getElementById('bg');
+    v.volume = {((double)assignment.Volume / 100.0).ToString(System.Globalization.CultureInfo.InvariantCulture)};
+    if ({assignment.IsMuted.ToString().ToLower()}) v.muted = true;
+    v.play().catch(e => {{ v.muted = true; v.play(); }});
+    bg.play().catch(() => {{}});
+    v.addEventListener('timeupdate', () => {{
+      if (Math.abs(bg.currentTime - v.currentTime) > 0.3) {{
+        bg.currentTime = v.currentTime;
+      }}
+    }});
+    v.addEventListener('pause', () => bg.pause());
+    v.addEventListener('play', () => bg.play());
+    v.addEventListener('seeking', () => {{ bg.currentTime = v.currentTime; }});
+  </script>
+</body>
+</html>";
+                }
+                else
+                {
+                    htmlContent = $@"<!DOCTYPE html>
 <html>
 <head>
   <meta charset=""utf-8"">
   <style>
     * {{ margin: 0; padding: 0; box-sizing: border-box; }}
     html, body {{ width: 100vw; height: 100vh; overflow: hidden; background: #000; }}
-    video {{ width: 100vw; height: 100vh; object-fit: cover; display: block; }}
+    video {{ width: 100vw; height: 100vh; object-fit: {scaleMode}; display: block; }}
   </style>
 </head>
 <body>
@@ -184,8 +279,8 @@ namespace AuraWallpaper.Core.Engine
   </script>
 </body>
 </html>";
-                    try { File.WriteAllText(indexHtml, htmlContent); } catch { }
                 }
+                try { File.WriteAllText(indexHtml, htmlContent); } catch { }
 
                 string targetUrl = File.Exists(indexHtml) ? indexHtml : wallpaper.FilePath;
                 playerExe = Path.Combine(appDir, "AuraWallpaper.Player.Web.exe");
@@ -216,15 +311,35 @@ namespace AuraWallpaper.Core.Engine
 
             try
             {
-                var psi = new ProcessStartInfo
+                Process? proc = null;
+                try
                 {
-                    FileName = playerExe,
-                    Arguments = args,
-                    UseShellExecute = false,
-                    CreateNoWindow = true
-                };
+                    var si = new NativeMethods.STARTUPINFO();
+                    si.cb = System.Runtime.InteropServices.Marshal.SizeOf(typeof(NativeMethods.STARTUPINFO));
+                    si.lpDesktop = @"WinSta0\Default";
 
-                var proc = Process.Start(psi);
+                    string cmdLine = $"\"{playerExe}\" {args}";
+                    if (NativeMethods.CreateProcess(null, cmdLine, IntPtr.Zero, IntPtr.Zero, false, 0, IntPtr.Zero, null, ref si, out var pi))
+                    {
+                        NativeMethods.CloseHandle(pi.hThread);
+                        NativeMethods.CloseHandle(pi.hProcess);
+                        proc = Process.GetProcessById(pi.dwProcessId);
+                    }
+                }
+                catch { }
+
+                if (proc == null)
+                {
+                    var psi = new ProcessStartInfo
+                    {
+                        FileName = playerExe,
+                        Arguments = args,
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    };
+                    proc = Process.Start(psi);
+                }
+
                 if (proc != null)
                 {
                     assignment.PlayerProcessId = proc.Id;
@@ -390,7 +505,12 @@ namespace AuraWallpaper.Core.Engine
             int idx = wallpapers.FindIndex(w => w.Id == currentWid);
             int nextIdx = (idx + 1) % wallpapers.Count;
 
-            SetWallpaper(wallpapers[nextIdx].Id);
+            var monitors = DisplayManager.Instance.GetMonitors();
+            var curMode = IsSpanMode ? AssignmentMode.Span : (IsDuplicateMode || monitors.Count > 1 ? AssignmentMode.Duplicate : AssignmentMode.PerMonitor);
+            var curScaling = _activeAssignments.Values.FirstOrDefault()?.Scaling ?? WallpaperScaling.Fill;
+            int monIdx = curMode == AssignmentMode.Span ? -1 : 0;
+
+            SetWallpaper(wallpapers[nextIdx].Id, monIdx, curMode, curScaling);
         }
 
         public void PreviousWallpaper()
@@ -402,16 +522,34 @@ namespace AuraWallpaper.Core.Engine
             int idx = wallpapers.FindIndex(w => w.Id == currentWid);
             int prevIdx = (idx - 1 + wallpapers.Count) % wallpapers.Count;
 
-            SetWallpaper(wallpapers[prevIdx].Id);
+            var monitors = DisplayManager.Instance.GetMonitors();
+            var curMode = IsSpanMode ? AssignmentMode.Span : (IsDuplicateMode || monitors.Count > 1 ? AssignmentMode.Duplicate : AssignmentMode.PerMonitor);
+            var curScaling = _activeAssignments.Values.FirstOrDefault()?.Scaling ?? WallpaperScaling.Fill;
+            int monIdx = curMode == AssignmentMode.Span ? -1 : 0;
+
+            SetWallpaper(wallpapers[prevIdx].Id, monIdx, curMode, curScaling);
         }
 
-        public void SetRandomWallpaper()
+        public void SetRandomWallpaper(int targetMonitorIndex = -2)
         {
             var wallpapers = AuraDatabase.Instance.GetAllWallpapers();
             if (wallpapers.Count == 0) return;
 
             int r = new Random().Next(0, wallpapers.Count);
-            SetWallpaper(wallpapers[r].Id);
+            var monitors = DisplayManager.Instance.GetMonitors();
+
+            if (targetMonitorIndex >= 0 && targetMonitorIndex < monitors.Count)
+            {
+                // Target specific monitor
+                SetWallpaper(wallpapers[r].Id, targetMonitorIndex, AssignmentMode.PerMonitor, WallpaperScaling.Fill);
+                return;
+            }
+
+            var curMode = IsSpanMode ? AssignmentMode.Span : (IsDuplicateMode || monitors.Count > 1 ? AssignmentMode.Duplicate : AssignmentMode.PerMonitor);
+            var curScaling = _activeAssignments.Values.FirstOrDefault()?.Scaling ?? WallpaperScaling.Fill;
+            int monIdx = curMode == AssignmentMode.Span ? -1 : 0;
+
+            SetWallpaper(wallpapers[r].Id, monIdx, curMode, curScaling);
         }
 
         private void SendPlayerControl(int monitorIndex, string command)
@@ -432,6 +570,15 @@ namespace AuraWallpaper.Core.Engine
         private void OnDisplayChanged(object? sender, EventArgs e)
         {
             // Display topology changed: re-apply assignments to appropriate screens
+            var monitors = DisplayManager.Instance.GetMonitors();
+            var assignments = AuraDatabase.Instance.GetMonitorAssignments();
+
+            if (assignments.Count == 0)
+            {
+                AutoApplyDefaultMultiDisplayConfiguration(monitors);
+                return;
+            }
+
             RestoreSavedWallpapers();
         }
 
@@ -453,12 +600,67 @@ namespace AuraWallpaper.Core.Engine
             }
         }
 
+        public void AutoApplyDefaultMultiDisplayConfiguration(List<MonitorDevice>? monitors = null)
+        {
+            monitors ??= DisplayManager.Instance.GetMonitors();
+            if (monitors.Count == 0) return;
+
+            var wallpapers = AuraDatabase.Instance.GetAllWallpapers();
+            if (wallpapers.Count == 0) return;
+
+            // Pick the first available favorite or first library wallpaper
+            var defaultWp = wallpapers.FirstOrDefault(w => w.IsFavorite) ?? wallpapers[0];
+
+            if (monitors.Count > 1)
+            {
+                // Multiple monitors automatically detected: apply Duplicate across all displays
+                SetWallpaper(defaultWp.Id, 0, AssignmentMode.Duplicate, WallpaperScaling.Fill);
+            }
+            else
+            {
+                // Single display: default to main single screen
+                SetWallpaper(defaultWp.Id, 0, AssignmentMode.PerMonitor, WallpaperScaling.Fill);
+            }
+        }
+
         public void RestoreSavedWallpapers()
         {
             var assignments = AuraDatabase.Instance.GetMonitorAssignments();
+            var monitors = DisplayManager.Instance.GetMonitors();
+
+            if (assignments.Count == 0)
+            {
+                // Auto-detect monitor setup on empty/first-run state
+                AutoApplyDefaultMultiDisplayConfiguration(monitors);
+                return;
+            }
+
+            var spanAssignment = assignments.FirstOrDefault(a => a.Mode == AssignmentMode.Span || a.MonitorIndex == -1 || a.MonitorDeviceId == "SPAN_VIRTUAL");
+            if (spanAssignment != null)
+            {
+                SetWallpaper(spanAssignment.WallpaperId, -1, AssignmentMode.Span, spanAssignment.Scaling);
+                return;
+            }
+
+            var duplicateAssignments = assignments.Where(a => a.Mode == AssignmentMode.Duplicate).ToList();
+            if (duplicateAssignments.Count > 0)
+            {
+                var firstDup = duplicateAssignments[0];
+                SetWallpaper(firstDup.WallpaperId, 0, AssignmentMode.Duplicate, firstDup.Scaling);
+                return;
+            }
+
+            // Per-monitor assignments
             foreach (var a in assignments)
             {
-                SetWallpaper(a.WallpaperId, a.MonitorIndex, a.Mode);
+                SetWallpaper(a.WallpaperId, a.MonitorIndex, a.Mode, a.Scaling);
+            }
+
+            // If user has multiple monitors, but only a single non-permonitor assignment was in DB,
+            // auto-duplicate across all connected displays
+            if (monitors.Count > 1 && assignments.Count == 1 && assignments[0].Mode != AssignmentMode.PerMonitor)
+            {
+                SetWallpaper(assignments[0].WallpaperId, 0, AssignmentMode.Duplicate, assignments[0].Scaling);
             }
         }
 
@@ -479,6 +681,12 @@ namespace AuraWallpaper.Core.Engine
                 case "hide":
                     WindowHideRequested?.Invoke();
                     return IpcResponse.Ok("Application window hidden.");
+
+                case "view":
+                case "navigate":
+                    string target = req.PropertyName ?? req.Mode ?? "active";
+                    ViewNavigationRequested?.Invoke(target);
+                    return IpcResponse.Ok($"Navigated to view: {target}");
 
                 case "play":
                     ResumeAll();
@@ -521,8 +729,37 @@ namespace AuraWallpaper.Core.Engine
                         }
 
                         int mon = req.MonitorIndex >= 0 ? req.MonitorIndex : 0;
-                        SetWallpaper(item.Id, mon);
-                        return IpcResponse.Ok($"Wallpaper set: {item.Title}");
+                        AssignmentMode assignMode;
+                        if (req.All || string.Equals(req.Mode, "duplicate", StringComparison.OrdinalIgnoreCase))
+                        {
+                            assignMode = AssignmentMode.Duplicate;
+                        }
+                        else if (string.Equals(req.Mode, "span", StringComparison.OrdinalIgnoreCase) || string.Equals(req.Mode, "extend", StringComparison.OrdinalIgnoreCase))
+                        {
+                            assignMode = AssignmentMode.Span;
+                        }
+                        else if (string.Equals(req.Mode, "permonitor", StringComparison.OrdinalIgnoreCase) || req.MonitorIndex >= 0)
+                        {
+                            assignMode = AssignmentMode.PerMonitor;
+                        }
+                        else
+                        {
+                            // Auto-detect: if multi-monitor, default to Duplicate across all screens; if single, default to PerMonitor (0)
+                            assignMode = DisplayManager.Instance.GetMonitors().Count > 1 ? AssignmentMode.Duplicate : AssignmentMode.PerMonitor;
+                        }
+
+                        WallpaperScaling scaling = WallpaperScaling.Fill;
+                        if (string.Equals(req.Scaling, "fit", StringComparison.OrdinalIgnoreCase))
+                        {
+                            scaling = WallpaperScaling.Fit;
+                        }
+                        else if (string.Equals(req.Scaling, "stretch", StringComparison.OrdinalIgnoreCase))
+                        {
+                            scaling = WallpaperScaling.Stretch;
+                        }
+
+                        SetWallpaper(item.Id, mon, assignMode, scaling);
+                        return IpcResponse.Ok($"Wallpaper set: {item.Title} (Mode: {assignMode}, Scaling: {scaling})");
                     }
                     return IpcResponse.Fail("Missing --file or --random option.");
 

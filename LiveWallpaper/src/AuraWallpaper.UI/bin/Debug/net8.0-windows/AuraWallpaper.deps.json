@@ -10,7 +10,6 @@
         "dependencies": {
           "AuraWallpaper.Core": "1.0.0",
           "Microsoft.Web.WebView2": "1.0.2903.40",
-          "WPF.UI": "3.1.0",
           "Microsoft.Web.WebView2.Core": "1.0.2903.40",
           "Microsoft.Web.WebView2.WinForms": "1.0.2903.40",
           "Microsoft.Web.WebView2.Wpf": "1.0.2903.40"
@@ -309,14 +308,6 @@
         }
       },
       "System.Security.Principal.Windows/4.7.0": {},
-      "WPF.UI/3.1.0": {
-        "runtime": {
-          "lib/net40/WPF.UI.dll": {
-            "assemblyVersion": "3.1.0.1",
-            "fileVersion": "3.1.0.1"
-          }
-        }
-      },
       "AuraWallpaper.Core/1.0.0": {
         "dependencies": {
           "Microsoft.Data.Sqlite": "8.0.8",
@@ -508,13 +499,6 @@
       "sha512": "sha512-ojD0PX0XhneCsUbAZVKdb7h/70vyYMDYs85lwEI+LngEONe/17A0cFaRFqZU+sOEidcVswYWikYOQ9PPfjlbtQ==",
       "path": "system.security.principal.windows/4.7.0",
       "hashPath": "system.security.principal.windows.4.7.0.nupkg.sha512"
-    },
-    "WPF.UI/3.1.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-OdptzLTlGgWzdV9HEjT3/7D6zuqMGipnwCMAK1MOil0qbJNKggiZAQPzkbkRcVW6M/yEwAmevrisPff2jE5c0w==",
-      "path": "wpf.ui/3.1.0",
-      "hashPath": "wpf.ui.3.1.0.nupkg.sha512"
     },
     "AuraWallpaper.Core/1.0.0": {
       "type": "project",

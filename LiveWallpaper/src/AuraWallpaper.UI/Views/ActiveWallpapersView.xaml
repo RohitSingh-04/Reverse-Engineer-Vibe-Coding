@@ -10,13 +10,59 @@
         </Grid.RowDefinitions>
 
         <!-- Header -->
-        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+        <StackPanel Grid.Row="0" Margin="0,0,0,16">
             <TextBlock Text="Active Wallpapers &amp; Displays" FontSize="26" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
-            <TextBlock Text="Live monitor control, individual volume levels, playback states, and wallpaper replacement." Foreground="{DynamicResource TextSecondary}" Margin="0,2,0,0"/>
+            <TextBlock Text="Live multi-display layout, duplicate &amp; extend options, volume levels, and playback controls." Foreground="{DynamicResource TextSecondary}" Margin="0,2,0,0"/>
         </StackPanel>
 
+        <!-- Multi-Display Toolbar & Status Banner -->
+        <Border Grid.Row="1" Margin="0,0,0,16" Background="{DynamicResource CardBackground}" BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" CornerRadius="8" Padding="14,12" VerticalAlignment="Top">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Connected Displays Pill Strip -->
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Displays:" FontWeight="SemiBold" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center" Margin="0,0,10,0" FontSize="12"/>
+                    <ItemsControl x:Name="DisplayTopologyItemsControl">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="0,0,8,0" Background="{DynamicResource SurfaceBackground}" BorderBrush="{DynamicResource CardBorder}" BorderThickness="1" CornerRadius="6" Padding="10,6">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <TextBlock Text="🖥️" FontSize="12" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{Binding DisplayName}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{Binding ResolutionText}" FontSize="11" Foreground="{DynamicResource TextSecondary}" Margin="6,0,0,0" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
+                <!-- Multi-Display Quick Action Buttons -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Multi-Display Mode:" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center" Margin="0,0,8,0" FontSize="12"/>
+                    <Button x:Name="DuplicateAllButton" Content="🔁 Duplicate All" Height="30" Padding="10,0" Click="DuplicateAll_Click" Margin="0,0,6,0"
+                            Background="{DynamicResource ButtonBackground}" Foreground="{DynamicResource TextPrimary}" BorderBrush="{DynamicResource ButtonBorder}" Cursor="Hand" ToolTip="Clone active wallpaper to all connected displays"/>
+                    <Button x:Name="SpanCroppedButton" Content="🖥️ Extend Cropped" Height="30" Padding="10,0" Click="SpanCropped_Click" Margin="0,0,6,0"
+                            Background="{DynamicResource ButtonBackground}" Foreground="{DynamicResource TextPrimary}" BorderBrush="{DynamicResource ButtonBorder}" Cursor="Hand" ToolTip="Span single wallpaper across all displays, cropped to fill without black bars"/>
+                    <Button x:Name="SpanFitButton" Content="✨ Extend Fit (Glow)" Height="30" Padding="10,0" Click="SpanFit_Click" Margin="0,0,8,0"
+                            Background="{DynamicResource ButtonBackground}" Foreground="{DynamicResource TextPrimary}" BorderBrush="{DynamicResource ButtonBorder}" Cursor="Hand" ToolTip="Span single wallpaper preserving original aspect ratio with an ambient blurred glow filling the screen wings"/>
+                    <Button Content="✕ Close All" Height="30" Padding="10,0" Click="CloseAll_Click"
+                            Background="#3D2020" Foreground="#FFA0A0" BorderThickness="0" Cursor="Hand" ToolTip="Stop and remove wallpapers from all displays"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
         <!-- Monitors & Active Wallpapers List -->
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" Margin="0,66,0,0">
             <ScrollViewer x:Name="MonitorsScrollViewer" VerticalScrollBarVisibility="Auto">
                 <ItemsControl x:Name="MonitorsItemsControl">
                     <ItemsControl.ItemTemplate>

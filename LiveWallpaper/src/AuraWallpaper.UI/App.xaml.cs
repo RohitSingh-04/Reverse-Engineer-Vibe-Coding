@@ -34,6 +34,12 @@ namespace AuraWallpaper.UI
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
+            try
+            {
+                NativeMethods.SetProcessDpiAwarenessContext(NativeMethods.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+            }
+            catch { }
+
             DesktopBridge.EnsureDefaultDesktop();
             LogTrace("Application_Startup enter");
 
@@ -155,19 +161,17 @@ namespace AuraWallpaper.UI
             ThreadPool.QueueUserWorkItem(_ =>
             {
                 Thread.Sleep(500);
-                Dispatcher.Invoke(() =>
+                try
                 {
-                    try
-                    {
-                        LogTrace("Restoring saved wallpapers...");
-                        manager.RestoreSavedWallpapers();
-                        LogTrace("Wallpapers restored.");
-                    }
-                    catch (Exception ex)
-                    {
-                        LogCrash("RestoreWallpapers: " + ex);
-                    }
-                });
+                    LogTrace("Restoring saved wallpapers in background...");
+                    manager.RestoreSavedWallpapers();
+                    LogTrace("Wallpapers restored.");
+                }
+                catch (Exception ex)
+                {
+                    LogCrash("RestoreWallpapers: " + ex);
+                    LogTrace("RestoreWallpapers failed: " + ex);
+                }
             });
         }
 

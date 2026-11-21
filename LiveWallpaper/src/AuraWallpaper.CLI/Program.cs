@@ -3,6 +3,7 @@ using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AuraWallpaper.Core.IPC;
+using AuraWallpaper.Core.Native;
 
 namespace AuraWallpaper.CLI
 {
@@ -10,6 +11,12 @@ namespace AuraWallpaper.CLI
     {
         public static async Task<int> Main(string[] args)
         {
+            try
+            {
+                NativeMethods.SetProcessDpiAwarenessContext(NativeMethods.DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+            }
+            catch { }
+
             if (args.Length == 0 || args[0] == "-h" || args[0] == "--help" || args[0] == "help")
             {
                 PrintHelp();
@@ -48,6 +55,14 @@ namespace AuraWallpaper.CLI
                 {
                     req.All = true;
                 }
+                else if ((arg == "--mode" || arg == "-M") && i + 1 < args.Length)
+                {
+                    req.Mode = args[++i];
+                }
+                else if ((arg == "--scaling" || arg == "-s") && i + 1 < args.Length)
+                {
+                    req.Scaling = args[++i];
+                }
                 else if ((arg == "--property" || arg == "-p") && i + 1 < args.Length)
                 {
                     req.PropertyName = args[++i];
@@ -63,6 +78,11 @@ namespace AuraWallpaper.CLI
             }
 
             // Specific command handling
+            if ((command == "view" || command == "navigate") && string.IsNullOrEmpty(req.PropertyName) && args.Length > 1)
+            {
+                req.PropertyName = args[1];
+            }
+
             if (command == "volume" && req.Volume == -1 && args.Length > 1 && int.TryParse(args[1], out int v))
             {
                 req.Volume = v;
@@ -115,6 +135,7 @@ USAGE:
 COMMANDS:
     show                         Show main application window
     hide                         Hide main application window (minimize to tray)
+    view <tab>                   Switch UI view (library, active, settings, about, playlists, screensaver, creator, performance)
     play                         Resume wallpaper playback across all monitors
     pause                        Pause wallpaper playback across all monitors
     mute                         Mute wallpaper audio
@@ -134,8 +155,10 @@ COMMANDS:
 OPTIONS:
     --file, -f <path>            Path to wallpaper file (video, html, gif, image, package)
     --monitor, -m <index>        Target monitor index (0, 1, 2...)
+    --mode, -M <mode>            Multi-display mode: duplicate, span, permonitor
+    --scaling, -s <scaling>      Scaling mode: fill (cropped), fit, stretch
     --random, -r                 Select a random wallpaper
-    --all, -a                    Apply to all monitors
+    --all, -a                    Apply to all monitors (duplicate)
     --json                       Output results in structured JSON format
     --help, -h                   Display this help message
 

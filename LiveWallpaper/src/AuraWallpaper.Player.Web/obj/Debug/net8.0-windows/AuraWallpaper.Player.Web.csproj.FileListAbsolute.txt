@@ -64,3 +64,4 @@ C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\src\AuraWallpap
 C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\src\AuraWallpaper.Player.Web\obj\Debug\net8.0-windows\AuraWallpaper.Player.Web.pdb
 C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\src\AuraWallpaper.Player.Web\obj\Debug\net8.0-windows\AuraWallpaper.Player.Web.genruntimeconfig.cache
 C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\src\AuraWallpaper.Player.Web\obj\Debug\net8.0-windows\ref\AuraWallpaper.Player.Web.dll
+C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\src\AuraWallpaper.Player.Web\obj\Debug\net8.0-windows\App.baml

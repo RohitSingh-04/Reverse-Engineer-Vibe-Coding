@@ -1,0 +1,83 @@
+[2026-11-20T16:38:02.8586187Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:38:03.0203198Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:38:03.5111465Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:38:03.5173728Z] InitializeWorkerW: _workerW=0xA0134, Progman=0x40336
+[2026-11-20T16:38:03.5186299Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:38:03.7558799Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:38:03.8675266Z] AttachToDesktop: hwnd=0x45086C, parent=0xA0134, oldParent=0xA0134, screen=(0,0,1920,1080), client=(1920,0), posResult=True
+[2026-11-20T16:38:03.9056644Z] AttachToDesktop: hwnd=0x45086C, parent=0xA0134, oldParent=0x1000C, screen=(0,0,1920,1080), client=(1920,0), posResult=True
+[2026-11-20T16:53:28.9926396Z] EnsureDefaultDesktop: FindProgman=0 (err=0), OpenDesktop=0x370 (err=0)
+[2026-11-20T16:53:28.9960417Z] EnsureDefaultDesktop: SetThreadDesktop=False (err=170), ProgmanAfter=0x0
+[2026-11-20T16:53:29.0161770Z] EnsureDefaultDesktop: FindProgman=0 (err=0), OpenDesktop=0x41C (err=0)
+[2026-11-20T16:53:29.0175490Z] EnsureDefaultDesktop: SetThreadDesktop=False (err=170), ProgmanAfter=0x0
+[2026-11-20T16:53:30.7634750Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:53:30.7983626Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:53:30.9739241Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:53:30.9920524Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:53:31.5368956Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:53:31.5458308Z] InitializeWorkerW: _workerW=0xA0134, Progman=0x40336
+[2026-11-20T16:53:31.5474415Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:53:31.5686837Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:53:31.5812675Z] InitializeWorkerW: _workerW=0xA0134, Progman=0x40336
+[2026-11-20T16:53:31.5838392Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:53:31.8395030Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:53:31.8663496Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:53:31.9901166Z] AttachToDesktop: hwnd=0x4F0374, parent=0xA0134, oldParent=0xA0134, screen=(0,0,1920,1080), client=(1920,0), posResult=True
+[2026-11-20T16:53:31.9982806Z] AttachToDesktop: hwnd=0x390104, parent=0xA0134, oldParent=0xA0134, screen=(-2400,0,2400,1350), client=(-480,0), posResult=True
+[2026-11-20T16:53:32.0364506Z] AttachToDesktop: hwnd=0x4F0374, parent=0xA0134, oldParent=0x1000C, screen=(0,0,1920,1080), client=(1920,0), posResult=True
+[2026-11-20T16:53:32.0439159Z] AttachToDesktop: hwnd=0x390104, parent=0xA0134, oldParent=0x1000C, screen=(-2400,0,2400,1350), client=(0,0), posResult=True
+[2026-11-20T16:56:59.8779813Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:56:59.8875601Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:57:00.1412431Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:57:00.1423076Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:57:00.6896429Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:57:00.6995039Z] InitializeWorkerW: _workerW=0xA0134, Progman=0x40336
+[2026-11-20T16:57:00.7019575Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:57:00.7086621Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:57:00.7321759Z] InitializeWorkerW: _workerW=0xA0134, Progman=0x40336
+[2026-11-20T16:57:00.7346006Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:57:01.0222734Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:57:01.1629648Z] AttachToDesktop: hwnd=0x4E0892, parent=0xA0134, oldParent=0xA0134, screen=(0,0,1920,1080), client=(1920,0), posResult=True
+[2026-11-20T16:57:01.1668571Z] AttachToDesktop: hwnd=0x4903C2, parent=0xA0134, oldParent=0xA0134, screen=(-2400,0,2400,1350), client=(-480,0), posResult=True
+[2026-11-20T16:57:01.2060618Z] AttachToDesktop: hwnd=0x4E0892, parent=0xA0134, oldParent=0x1000C, screen=(0,0,1920,1080), client=(1920,0), posResult=True
+[2026-11-20T16:57:01.2079425Z] AttachToDesktop: hwnd=0x4903C2, parent=0xA0134, oldParent=0x1000C, screen=(-2400,0,2400,1350), client=(0,0), posResult=True
+[2026-11-20T17:02:15.2445067Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:02:15.4119128Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:02:15.8969082Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:02:15.9020043Z] InitializeWorkerW: _workerW=0xA0134, Progman=0x40336
+[2026-11-20T17:02:15.9031393Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:02:16.1511154Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:02:16.2825220Z] AttachToDesktop: hwnd=0x220550, parent=0xA0134, oldParent=0xA0134, screen=(0,0,1920,1080), client=(1920,0), posResult=True
+[2026-11-20T17:02:16.3278799Z] AttachToDesktop: hwnd=0x220550, parent=0xA0134, oldParent=0x1000C, screen=(0,0,1920,1080), client=(1920,0), posResult=True
+[2026-11-20T17:03:06.4113275Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:03:06.5648918Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:03:06.9829721Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:03:06.9893804Z] InitializeWorkerW: _workerW=0xA0134, Progman=0x40336
+[2026-11-20T17:03:06.9907872Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:03:07.1960624Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:03:07.3593309Z] AttachToDesktop: hwnd=0x49030A, parent=0xA0134, oldParent=0xA0134, screen=(-2400,0,2400,1350), client=(-480,0), posResult=True
+[2026-11-20T17:03:07.3989991Z] AttachToDesktop: hwnd=0x49030A, parent=0xA0134, oldParent=0x1000C, screen=(-2400,0,2400,1350), client=(0,0), posResult=True
+[2026-11-20T17:04:46.6942185Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:04:46.8669689Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:04:47.3489762Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:04:47.3555485Z] InitializeWorkerW: _workerW=0xA0134, Progman=0x40336
+[2026-11-20T17:04:47.3571471Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:04:47.5990944Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:04:47.7134996Z] AttachToDesktop: hwnd=0x290496, parent=0xA0134, oldParent=0xA0134, screen=(-2400,0,4320,1350), client=(-480,0), posResult=True
+[2026-11-20T17:04:47.7512183Z] AttachToDesktop: hwnd=0x290496, parent=0xA0134, oldParent=0x1000C, screen=(-2400,0,4320,1350), client=(0,0), posResult=True
+[2026-11-20T17:06:31.4319483Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:06:31.4539043Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:06:31.6484173Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:06:31.6726441Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:06:32.2011801Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:06:32.2069210Z] InitializeWorkerW: _workerW=0xA0134, Progman=0x40336
+[2026-11-20T17:06:32.2084269Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:06:32.2210781Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:06:32.2383575Z] InitializeWorkerW: _workerW=0xA0134, Progman=0x40336
+[2026-11-20T17:06:32.2404681Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:06:32.4780842Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:06:32.5035739Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:06:32.6144769Z] AttachToDesktop: hwnd=0x740804, parent=0xA0134, oldParent=0xA0134, screen=(0,0,1920,1080), client=(1920,0), posResult=True
+[2026-11-20T17:06:32.6258562Z] AttachToDesktop: hwnd=0x5F0160, parent=0xA0134, oldParent=0xA0134, screen=(-2400,0,2400,1350), client=(-480,0), posResult=True
+[2026-11-20T17:06:32.6553951Z] AttachToDesktop: hwnd=0x740804, parent=0xA0134, oldParent=0x1000C, screen=(0,0,1920,1080), client=(1920,0), posResult=True
+[2026-11-20T17:06:32.6708555Z] AttachToDesktop: hwnd=0x5F0160, parent=0xA0134, oldParent=0x1000C, screen=(-2400,0,2400,1350), client=(0,0), posResult=True

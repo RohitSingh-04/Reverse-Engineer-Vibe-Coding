@@ -39,8 +39,43 @@ namespace AuraWallpaper.UI
             catch { }
 
             WallpaperManager.Instance.AssignmentsChanged += () => Dispatcher.Invoke(UpdatePlaybackControls);
+            WallpaperManager.Instance.ViewNavigationRequested += (v) => Dispatcher.Invoke(() => NavigateToView(v));
             ThemeManager.ThemeChanged += (t) => Dispatcher.Invoke(UpdateThemeButton);
             UpdateThemeButton();
+        }
+
+        public void NavigateToView(string? viewName)
+        {
+            switch (viewName?.ToLowerInvariant())
+            {
+                case "active":
+                case "activewallpapers":
+                case "displays":
+                    if (NavActive != null) NavActive.IsChecked = true;
+                    break;
+                case "library":
+                case "wallpapers":
+                    if (NavLibrary != null) NavLibrary.IsChecked = true;
+                    break;
+                case "playlists":
+                    if (NavPlaylists != null) NavPlaylists.IsChecked = true;
+                    break;
+                case "screensaver":
+                    if (NavScreensaver != null) NavScreensaver.IsChecked = true;
+                    break;
+                case "creator":
+                    if (NavCreator != null) NavCreator.IsChecked = true;
+                    break;
+                case "performance":
+                    if (NavPerformance != null) NavPerformance.IsChecked = true;
+                    break;
+                case "settings":
+                    if (NavSettings != null) NavSettings.IsChecked = true;
+                    break;
+                case "about":
+                    if (NavAbout != null) NavAbout.IsChecked = true;
+                    break;
+            }
         }
 
         private void UpdateThemeButton()

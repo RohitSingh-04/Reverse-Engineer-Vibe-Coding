@@ -7,6 +7,16 @@
         ShowInTaskbar="False"
         Background="Black">
     <Grid Background="Black">
+        <!-- Ambient Blurred Backdrop for Picture/GIF -->
+        <Image x:Name="AmbientPicturePlayer"
+               Stretch="UniformToFill"
+               Visibility="Collapsed"
+               Opacity="0.65">
+            <Image.Effect>
+                <BlurEffect Radius="60" KernelType="Gaussian"/>
+            </Image.Effect>
+        </Image>
+
         <!-- Video Player -->
         <MediaElement x:Name="MediaPlayer"
                       LoadedBehavior="Manual"

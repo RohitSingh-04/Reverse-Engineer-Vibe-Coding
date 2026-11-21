@@ -1,0 +1,20 @@
+[2026-11-20T16:42:18.7186468Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:42:18.7253882Z] InitializeWorkerW: _workerW=0x40336, Progman=0x40336
+[2026-11-20T16:42:18.7330556Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T16:42:18.7347654Z] InitializeWorkerW: _workerW=0x40336, Progman=0x40336
+[2026-11-20T17:09:10.4446577Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:09:10.4512549Z] InitializeWorkerW: _workerW=0x40336, Progman=0x40336
+[2026-11-20T17:09:10.4525189Z] EnsureDefaultDesktop: Found Progman 0x40336
+[2026-11-20T17:09:10.4545869Z] InitializeWorkerW: _workerW=0x40336, Progman=0x40336
+[2026-11-21T02:07:39.0720081Z] EnsureDefaultDesktop: Found Progman 0x3401C4
+[2026-11-21T02:07:39.0781510Z] InitializeWorkerW: _workerW=0x3401C4, Progman=0x3401C4
+[2026-11-21T02:07:39.0789002Z] EnsureDefaultDesktop: Found Progman 0x3401C4
+[2026-11-21T02:07:39.0800002Z] InitializeWorkerW: _workerW=0x3401C4, Progman=0x3401C4
+[2026-11-21T02:12:27.4653956Z] EnsureDefaultDesktop: Found Progman 0x3401C4
+[2026-11-21T02:12:27.4720744Z] InitializeWorkerW: _workerW=0x3401C4, Progman=0x3401C4
+[2026-11-21T02:12:27.4728944Z] EnsureDefaultDesktop: Found Progman 0x3401C4
+[2026-11-21T02:12:27.4743119Z] InitializeWorkerW: _workerW=0x3401C4, Progman=0x3401C4
+[2026-11-21T03:11:24.7652775Z] EnsureDefaultDesktop: Found Progman 0x3401C4
+[2026-11-21T03:11:24.7756152Z] InitializeWorkerW: _workerW=0x3401C4, Progman=0x3401C4
+[2026-11-21T03:11:24.7770760Z] EnsureDefaultDesktop: Found Progman 0x3401C4
+[2026-11-21T03:11:24.7791648Z] InitializeWorkerW: _workerW=0x3401C4, Progman=0x3401C4

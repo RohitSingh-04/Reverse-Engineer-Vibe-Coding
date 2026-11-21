@@ -10,13 +10,24 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("AuraScreensaver")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("Author", "Rohit Singh")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("Developer", "Rohit Singh")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("Organization", "Rohit Singh Personal")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("GitHub", "https://github.com/RohitSingh-04")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("LinkedIn", "https://linkedin.com/in/rohiyaa")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("BuiltUsing", "Antigravity (Gemini 3.8 Flash)")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("Rohit Singh Personal")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyCopyrightAttribute("Copyright © 2026 Rohit Singh. All rights reserved.")]
+[assembly: System.Reflection.AssemblyDescriptionAttribute("Production-grade Windows Live Wallpaper & Screensaver Platform built using Antigr" +
+    "avity (Gemini 3.8 Flash).")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
-[assembly: System.Reflection.AssemblyProductAttribute("AuraScreensaver")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+feb85cc36788a540512b48dbbdebf2d729f0dd71")]
+[assembly: System.Reflection.AssemblyProductAttribute("Aura Live Wallpaper")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AuraScreensaver")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("RepositoryUrl", "https://github.com/RohitSingh-04")]
+[assembly: System.Resources.NeutralResourcesLanguageAttribute("en-US")]
 [assembly: System.Runtime.Versioning.TargetPlatformAttribute("Windows7.0")]
 [assembly: System.Runtime.Versioning.SupportedOSPlatformAttribute("Windows7.0")]
 

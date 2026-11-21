@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using AuraWallpaper.Core.Models;
 using Microsoft.Win32;
@@ -46,14 +47,36 @@ namespace AuraWallpaper.Core.Native
                     string deviceName = mi.szDevice ?? $"Display {index + 1}";
                     string friendlyName = GetFriendlyMonitorName(deviceName, index + 1);
 
+                    int posX = mi.rcMonitor.Left;
+                    int posY = mi.rcMonitor.Top;
+                    int width = mi.rcMonitor.Width;
+                    int height = mi.rcMonitor.Height;
+
+                    // Query native hardware display resolution via EnumDisplaySettings to prevent any DPI virtualization distortion
+                    if (!string.IsNullOrEmpty(mi.szDevice))
+                    {
+                        var dm = new NativeMethods.DEVMODE();
+                        dm.dmSize = (short)Marshal.SizeOf(typeof(NativeMethods.DEVMODE));
+                        if (NativeMethods.EnumDisplaySettings(mi.szDevice, NativeMethods.ENUM_CURRENT_SETTINGS, ref dm))
+                        {
+                            if (dm.dmPelsWidth > 0 && dm.dmPelsHeight > 0)
+                            {
+                                posX = dm.dmPositionX;
+                                posY = dm.dmPositionY;
+                                width = dm.dmPelsWidth;
+                                height = dm.dmPelsHeight;
+                            }
+                        }
+                    }
+
                     var device = new MonitorDevice
                     {
                         Index = index,
                         DeviceId = mi.szDevice ?? $"MONITOR_{index}",
                         DeviceName = friendlyName,
                         HMonitor = hMonitor,
-                        Bounds = new MonitorRect(mi.rcMonitor.Left, mi.rcMonitor.Top, mi.rcMonitor.Width, mi.rcMonitor.Height),
-                        WorkingArea = new MonitorRect(mi.rcWork.Left, mi.rcWork.Top, mi.rcWork.Width, mi.rcWork.Height),
+                        Bounds = new MonitorRect(posX, posY, width, height),
+                        WorkingArea = new MonitorRect(posX, posY, width, height),
                         IsPrimary = isPrimary,
                         ScalingFactor = 1.0 // Normalized DPI scale
                     };
@@ -86,20 +109,31 @@ namespace AuraWallpaper.Core.Native
 
         public MonitorRect GetVirtualScreenBounds()
         {
-            int x = NativeMethods.GetSystemMetrics(NativeMethods.SM_XVIRTUALSCREEN);
-            int y = NativeMethods.GetSystemMetrics(NativeMethods.SM_YVIRTUALSCREEN);
-            int cx = NativeMethods.GetSystemMetrics(NativeMethods.SM_CXVIRTUALSCREEN);
-            int cy = NativeMethods.GetSystemMetrics(NativeMethods.SM_CYVIRTUALSCREEN);
-
-            if (cx <= 0 || cy <= 0)
+            var monitors = GetMonitors();
+            if (monitors.Count == 0)
             {
-                cx = NativeMethods.GetSystemMetrics(NativeMethods.SM_CXSCREEN);
-                cy = NativeMethods.GetSystemMetrics(NativeMethods.SM_CYSCREEN);
-                x = 0;
-                y = 0;
+                int x = NativeMethods.GetSystemMetrics(NativeMethods.SM_XVIRTUALSCREEN);
+                int y = NativeMethods.GetSystemMetrics(NativeMethods.SM_YVIRTUALSCREEN);
+                int cx = NativeMethods.GetSystemMetrics(NativeMethods.SM_CXVIRTUALSCREEN);
+                int cy = NativeMethods.GetSystemMetrics(NativeMethods.SM_CYVIRTUALSCREEN);
+
+                if (cx <= 0 || cy <= 0)
+                {
+                    cx = NativeMethods.GetSystemMetrics(NativeMethods.SM_CXSCREEN);
+                    cy = NativeMethods.GetSystemMetrics(NativeMethods.SM_CYSCREEN);
+                    x = 0;
+                    y = 0;
+                }
+
+                return new MonitorRect(x, y, cx, cy);
             }
 
-            return new MonitorRect(x, y, cx, cy);
+            int minX = monitors.Min(m => m.Bounds.X);
+            int minY = monitors.Min(m => m.Bounds.Y);
+            int maxX = monitors.Max(m => m.Bounds.X + m.Bounds.Width);
+            int maxY = monitors.Max(m => m.Bounds.Y + m.Bounds.Height);
+
+            return new MonitorRect(minX, minY, maxX - minX, maxY - minY);
         }
 
         private static string GetFriendlyMonitorName(string deviceName, int fallbackNumber)

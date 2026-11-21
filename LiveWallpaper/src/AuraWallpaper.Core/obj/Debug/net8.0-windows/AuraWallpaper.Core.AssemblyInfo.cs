@@ -10,6 +10,12 @@
 using System;
 using System.Reflection;
 
+[assembly: System.Reflection.AssemblyMetadataAttribute("Author", "Rohit Singh")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("Developer", "Rohit Singh")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("Organization", "Rohit Singh Personal")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("GitHub", "https://github.com/RohitSingh-04")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("LinkedIn", "https://linkedin.com/in/rohiyaa")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("BuiltUsing", "Antigravity (Gemini 3.8 Flash)")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("Rohit Singh Personal")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyCopyrightAttribute("Copyright © 2026 Rohit Singh. All rights reserved.")]

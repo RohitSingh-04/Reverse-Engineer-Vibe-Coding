@@ -11,6 +11,8 @@ namespace AuraWallpaper.Core.IPC
         public int Volume { get; set; } = -1;
         public bool Random { get; set; }
         public bool All { get; set; }
+        public string? Mode { get; set; }
+        public string? Scaling { get; set; }
         public string? PropertyName { get; set; }
         public string? PropertyValue { get; set; }
         public Dictionary<string, string> ExtraArgs { get; set; } = new Dictionary<string, string>();

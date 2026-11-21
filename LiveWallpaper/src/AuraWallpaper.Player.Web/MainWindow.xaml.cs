@@ -35,11 +35,6 @@ namespace AuraWallpaper.Player.Web
             _volume = vol;
             _isMuted = mute;
 
-            Left = x;
-            Top = y;
-            Width = w;
-            Height = h;
-
             SourceInitialized += OnSourceInitialized;
             Loaded += OnLoaded;
             Closed += OnClosed;
@@ -61,22 +56,44 @@ namespace AuraWallpaper.Player.Web
             await InitializeWebViewAsync();
         }
 
+        private static void Log(string msg)
+        {
+            try
+            {
+                string logFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "player_web.log");
+                File.AppendAllText(logFile, $"[{DateTime.UtcNow:O}] {msg}\r\n");
+            }
+            catch { }
+        }
+
         private async Task InitializeWebViewAsync()
         {
             try
             {
-                string dataFolder = Path.Combine(
-                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-                    "AuraWallpaper",
-                    $"WebView2Data_mon{_monitorIndex}"
-                );
-                Directory.CreateDirectory(dataFolder);
+                Log($"InitializeWebViewAsync enter for url: {_targetUrl}");
+                string dataFolder;
+                try
+                {
+                    dataFolder = Path.Combine(
+                        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                        "AuraWallpaper",
+                        $"WebView2Data_mon{_monitorIndex}"
+                    );
+                    Directory.CreateDirectory(dataFolder);
+                }
+                catch
+                {
+                    dataFolder = Path.Combine(Path.GetTempPath(), "AuraWallpaper", $"WebView2Data_mon{_monitorIndex}");
+                    Directory.CreateDirectory(dataFolder);
+                }
 
+                Log($"Using WebView2 dataFolder: {dataFolder}");
                 var options = new CoreWebView2EnvironmentOptions(
                     "--autoplay-policy=no-user-gesture-required --disable-background-timer-throttling --disable-renderer-backgrounding --allow-file-access-from-files"
                 );
                 var env = await CoreWebView2Environment.CreateAsync(null, dataFolder, options);
                 await WebBrowser.EnsureCoreWebView2Async(env);
+                Log("WebView2 initialized successfully");
 
                 WebBrowser.CoreWebView2.Settings.IsStatusBarEnabled = false;
                 WebBrowser.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
@@ -110,6 +127,7 @@ namespace AuraWallpaper.Player.Web
             }
             catch (Exception ex)
             {
+                Log($"WebView2 initialization failed: {ex}");
                 System.Diagnostics.Debug.WriteLine($"WebView2 initialization failed: {ex.Message}");
             }
         }

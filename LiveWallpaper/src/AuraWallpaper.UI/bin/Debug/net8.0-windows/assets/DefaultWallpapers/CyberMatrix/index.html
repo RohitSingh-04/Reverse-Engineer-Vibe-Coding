@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Cyber Matrix Code Rain</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background: #000000; }
+        canvas { display: block; width: 100%; height: 100%; }
+    </style>
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+    <script>
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            columns = Math.floor(width / fontSize);
+            drops = new Array(columns).fill(1);
+        });
+
+        const chars = '0123456789ABCDEF!@#$%&*+-=~ｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜ';
+        const fontSize = 16;
+        let columns = Math.floor(width / fontSize);
+        let drops = new Array(columns).fill(1);
+
+        let rainColor = '#00ff66';
+        let speed = 33;
+
+        window.auraPropertyListener = window.livelyPropertyListener = function(name, val) {
+            if (name === 'rainColor') rainColor = val;
+            if (name === 'speed') {
+                speed = parseInt(val) || 33;
+                restartLoop();
+            }
+        };
+
+        function draw() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.06)';
+            ctx.fillRect(0, 0, width, height);
+
+            ctx.fillStyle = rainColor;
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        let intervalId = setInterval(draw, speed);
+        function restartLoop() {
+            clearInterval(intervalId);
+            intervalId = setInterval(draw, speed);
+        }
+    </script>
+</body>
+</html>

@@ -10,7 +10,7 @@
 [![Platform](https://img.shields.io/badge/platform-Windows%2010%20%2F%2011%20x64-blue.svg?style=flat-square)]()
 [![Framework](https://img.shields.io/badge/.NET-8.0%20LTS-purple.svg?style=flat-square)]()
 [![UI](https://img.shields.io/badge/UI-Fluent%20Design%20(Dark%20%26%20Light)-0078d4.svg?style=flat-square)]()
-[![Build](https://img.shields.io/badge/tests-18%2F18%20passing-brightgreen.svg?style=flat-square)]()
+[![Build](https://img.shields.io/badge/tests-20%2F20%20passing-brightgreen.svg?style=flat-square)]()
 [![License](https://img.shields.io/badge/license-GPL--3.0-orange.svg?style=flat-square)]()
 
 ---
@@ -89,6 +89,30 @@ flowchart TD
 | **Light & Dark Theme Switch** | 100% | Partial | Instant UI toggle with high contrast |
 | **Chat-Style Smooth Scrollbar** | 100% | N/A | Arrowless sleek scroll with Top/Bottom jump |
 | **Persistent SQLite Storage** | 100% | 100% | Fully normalized schema |
+
+---
+
+## Multi-Display Modes & Virtual Screen Architecture
+
+Aura Live Wallpaper provides robust, first-class support for multi-monitor setups of any configuration—including mixed DPI monitors, vertical orientations, and secondary displays placed at negative desktop coordinates (e.g. `X < 0` to the left of the primary monitor).
+
+### Supported Display Modes
+1. **🔁 Duplicate on All Displays**:
+   - Clones the selected live wallpaper across every connected display.
+   - Synchronized audio playback with independent hardware rendering instances per screen.
+2. **🖥️ Extend / Span Cropped (Fill All)**:
+   - Spans a single wide wallpaper seamlessly across your entire multi-monitor setup (`VirtualScreenBounds`).
+   - Dynamically scales with `object-fit: cover` to completely fill all display viewports without letterboxing or black bars.
+3. **🖼️ Extend / Span Fit (Keep Ratio)**:
+   - Spans a single wallpaper across all displays while preserving the media's native aspect ratio (`object-fit: contain`).
+4. **🎯 Per-Monitor Individual Assignment**:
+   - Assign different wallpapers, volume levels, and playback states to specific monitors (`Monitor 1`, `Monitor 2`, etc.).
+
+### Virtual Screen Injection Technology
+Windows Explorer initializes `WorkerW` to cover only the primary screen. When a multi-monitor layout features displays at negative coordinates or spanning across multiple outputs:
+- **Virtual Bounds Resizing**: Aura dynamically resizes `WorkerW` via Win32 `SetWindowPos` to match the exact virtual screen rectangle returned by `GetSystemMetrics(SM_XVIRTUALSCREEN)` and `SM_YVIRTUALSCREEN`.
+- **Coordinate Transformation**: Aura translates child window placement using `ScreenToClient(WorkerW, ref pt)`, ensuring players positioned at negative monitor coordinates (such as `X = -1920`) map precisely into the desktop client area without clipping or displacement.
+- **Topological Monitoring**: Listens to `WM_DISPLAYCHANGE` to re-query display geometry and reposition active wallpapers when monitors are plugged in, unplugged, or rearranged.
 
 ---
 
@@ -181,9 +205,23 @@ wallctl play
 # Adjust master wallpaper audio volume (0 - 100)
 wallctl volume 50
 
+# Apply a wallpaper duplicated across all connected displays
+wallctl set --file "C:\Wallpapers\CyberMatrix.mp4" --mode duplicate
+
+# Apply a single wallpaper spanned/extended across all displays (cropped to fill)
+wallctl set --file "C:\Wallpapers\PanoramicSpace.mp4" --mode span --scaling fill
+
+# Apply a wallpaper spanned across all displays (preserving aspect ratio)
+wallctl set --file "C:\Wallpapers\PanoramicSpace.mp4" --mode span --scaling fit
+
 # Apply a local video or web URL wallpaper to Monitor 0
 wallctl set --file "C:\Wallpapers\CyberMatrix.mp4" --monitor 0
 wallctl set --url "https://threejs.org/examples/webgl_shaders_ocean.html"
+
+# Switch UI view tab remotely
+wallctl view active
+wallctl view library
+wallctl view settings
 
 # Pick and apply a random wallpaper from your library
 wallctl set --random

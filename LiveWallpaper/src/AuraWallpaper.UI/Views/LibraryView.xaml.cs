@@ -25,19 +25,7 @@ namespace AuraWallpaper.UI.Views
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             _isLoaded = true;
-            LoadMonitors();
             RefreshWallpapers();
-        }
-
-        private void LoadMonitors()
-        {
-            if (MonitorTargetCombo == null) return;
-            var monitors = DisplayManager.Instance.GetMonitors();
-            MonitorTargetCombo.ItemsSource = monitors.Select(m => m.DeviceName).ToList();
-            if (monitors.Count > 0)
-            {
-                MonitorTargetCombo.SelectedIndex = 0;
-            }
         }
 
         public void RefreshWallpapers()
@@ -154,8 +142,59 @@ namespace AuraWallpaper.UI.Views
         {
             if (sender is Button btn && btn.DataContext is WallpaperItem item)
             {
-                int monIdx = MonitorTargetCombo.SelectedIndex >= 0 ? MonitorTargetCombo.SelectedIndex : 0;
-                WallpaperManager.Instance.SetWallpaper(item.Id, monIdx, AssignmentMode.PerMonitor);
+                ApplyWallpaperWithSelection(item);
+            }
+        }
+
+        private void ApplyWallpaperWithSelection(WallpaperItem item)
+        {
+            var monitors = DisplayManager.Instance.GetMonitors();
+            if (monitors.Count > 1)
+            {
+                WallpaperManager.Instance.SetWallpaper(item.Id, 0, AssignmentMode.Duplicate, WallpaperScaling.Fill);
+            }
+            else
+            {
+                WallpaperManager.Instance.SetWallpaper(item.Id, 0, AssignmentMode.PerMonitor, WallpaperScaling.Fill);
+            }
+        }
+
+        private void ApplyMenuButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is WallpaperItem item)
+            {
+                var menu = new ContextMenu();
+
+                var miDup = new MenuItem { Header = "🔁 Duplicate on All Displays" };
+                miDup.Click += (s, args) => WallpaperManager.Instance.SetWallpaper(item.Id, 0, AssignmentMode.Duplicate, WallpaperScaling.Fill);
+                menu.Items.Add(miDup);
+
+                var miSpanCrop = new MenuItem { Header = "🖥️ Extend / Span Cropped Across Displays" };
+                miSpanCrop.Click += (s, args) => WallpaperManager.Instance.SetWallpaper(item.Id, -1, AssignmentMode.Span, WallpaperScaling.Fill);
+                menu.Items.Add(miSpanCrop);
+
+                var miSpanFit = new MenuItem { Header = "✨ Extend / Span Fit (Ambient Glow)" };
+                miSpanFit.Click += (s, args) => WallpaperManager.Instance.SetWallpaper(item.Id, -1, AssignmentMode.Span, WallpaperScaling.Fit);
+                menu.Items.Add(miSpanFit);
+
+                var monitors = DisplayManager.Instance.GetMonitors();
+                if (monitors.Count > 0)
+                {
+                    menu.Items.Add(new Separator());
+                    for (int i = 0; i < monitors.Count; i++)
+                    {
+                        int monIdx = i;
+                        var m = monitors[i];
+                        string label = $"Apply to Monitor {i + 1} ({m.DeviceName}) - {m.Bounds.Width}x{m.Bounds.Height}{(m.IsPrimary ? " [Primary]" : "")}";
+                        var miMon = new MenuItem { Header = label };
+                        miMon.Click += (s, args) => WallpaperManager.Instance.SetWallpaper(item.Id, monIdx, AssignmentMode.PerMonitor, WallpaperScaling.Fill);
+                        menu.Items.Add(miMon);
+                    }
+                }
+
+                menu.PlacementTarget = btn;
+                menu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+                menu.IsOpen = true;
             }
         }
 
@@ -172,16 +211,23 @@ namespace AuraWallpaper.UI.Views
         {
             if (sender is MenuItem mi && mi.DataContext is WallpaperItem item)
             {
-                int monIdx = MonitorTargetCombo.SelectedIndex >= 0 ? MonitorTargetCombo.SelectedIndex : 0;
-                WallpaperManager.Instance.SetWallpaper(item.Id, monIdx, AssignmentMode.PerMonitor);
+                ApplyWallpaperWithSelection(item);
             }
         }
 
-        private void MenuSpan_Click(object sender, RoutedEventArgs e)
+        private void MenuSpanCropped_Click(object sender, RoutedEventArgs e)
         {
             if (sender is MenuItem mi && mi.DataContext is WallpaperItem item)
             {
-                WallpaperManager.Instance.SetWallpaper(item.Id, 0, AssignmentMode.Span);
+                WallpaperManager.Instance.SetWallpaper(item.Id, -1, AssignmentMode.Span, WallpaperScaling.Fill);
+            }
+        }
+
+        private void MenuSpanFit_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem mi && mi.DataContext is WallpaperItem item)
+            {
+                WallpaperManager.Instance.SetWallpaper(item.Id, -1, AssignmentMode.Span, WallpaperScaling.Fit);
             }
         }
 
@@ -189,7 +235,7 @@ namespace AuraWallpaper.UI.Views
         {
             if (sender is MenuItem mi && mi.DataContext is WallpaperItem item)
             {
-                WallpaperManager.Instance.SetWallpaper(item.Id, 0, AssignmentMode.Duplicate);
+                WallpaperManager.Instance.SetWallpaper(item.Id, 0, AssignmentMode.Duplicate, WallpaperScaling.Fill);
             }
         }
 

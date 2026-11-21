@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Text;
 using System.Threading;
 
@@ -22,6 +23,16 @@ namespace AuraWallpaper.Core.Native
             InitializeWorkerW();
         }
 
+        private static void LogBridge(string msg)
+        {
+            try
+            {
+                string logFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "desktop_bridge.log");
+                File.AppendAllText(logFile, $"[{DateTime.UtcNow:O}] {msg}\r\n");
+            }
+            catch { }
+        }
+
         public static bool EnsureDefaultDesktop()
         {
             try
@@ -29,17 +40,27 @@ namespace AuraWallpaper.Core.Native
                 IntPtr progman = NativeMethods.FindWindow("Progman", null);
                 if (progman != IntPtr.Zero)
                 {
+                    LogBridge($"EnsureDefaultDesktop: Found Progman 0x{progman.ToInt64():X}");
                     return true;
                 }
 
+                int err1 = System.Runtime.InteropServices.Marshal.GetLastWin32Error();
                 IntPtr hDesk = NativeMethods.OpenDesktop("Default", 0, false, NativeMethods.DESKTOP_ALL_ACCESS);
+                int err2 = System.Runtime.InteropServices.Marshal.GetLastWin32Error();
+                LogBridge($"EnsureDefaultDesktop: FindProgman=0 (err={err1}), OpenDesktop=0x{hDesk.ToInt64():X} (err={err2})");
+
                 if (hDesk != IntPtr.Zero)
                 {
-                    return NativeMethods.SetThreadDesktop(hDesk);
+                    bool setDesk = NativeMethods.SetThreadDesktop(hDesk);
+                    int err3 = System.Runtime.InteropServices.Marshal.GetLastWin32Error();
+                    IntPtr pAfter = NativeMethods.FindWindow("Progman", null);
+                    LogBridge($"EnsureDefaultDesktop: SetThreadDesktop={setDesk} (err={err3}), ProgmanAfter=0x{pAfter.ToInt64():X}");
+                    return setDesk;
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                LogBridge("EnsureDefaultDesktop exception: " + ex);
             }
             return false;
         }
@@ -80,54 +101,44 @@ namespace AuraWallpaper.Core.Native
 
                 IntPtr workerW = IntPtr.Zero;
 
-                // 1. Direct child WorkerW of Progman (Windows 11 modern architecture)
-                IntPtr childWorker = NativeMethods.FindWindowEx(_progman, IntPtr.Zero, "WorkerW", null);
-                if (childWorker != IntPtr.Zero && NativeMethods.IsWindowVisible(childWorker))
+                // Search for WorkerW in the window hierarchy containing SHELLDLL_DefView
+                NativeMethods.EnumWindows((toplevelHwnd, lParam) =>
                 {
-                    workerW = childWorker;
-                }
+                    var shellView = NativeMethods.FindWindowEx(toplevelHwnd, IntPtr.Zero, "SHELLDLL_DefView", null);
+                    if (shellView != IntPtr.Zero)
+                    {
+                        // Windows 11: WorkerW is spawned as a child of the window with DefView (Progman)
+                        var child = NativeMethods.FindWindowEx(toplevelHwnd, IntPtr.Zero, "WorkerW", null);
+                        if (child != IntPtr.Zero)
+                        {
+                            workerW = child;
+                            return false;
+                        }
 
-                // 2. Windows 10 / earlier Windows 11: Top-level WorkerW sibling behind SHELLDLL_DefView
+                        // Windows 10: WorkerW is spawned as a top-level sibling immediately after toplevelHwnd
+                        var sibling = NativeMethods.FindWindowEx(IntPtr.Zero, toplevelHwnd, "WorkerW", null);
+                        if (sibling != IntPtr.Zero)
+                        {
+                            workerW = sibling;
+                            return false;
+                        }
+                    }
+                    return true;
+                }, IntPtr.Zero);
+
+                // Fallback: Check if Progman has a WorkerW child
                 if (workerW == IntPtr.Zero)
                 {
-                    NativeMethods.EnumWindows((toplevelHwnd, lParam) =>
+                    IntPtr childWorker = NativeMethods.FindWindowEx(_progman, IntPtr.Zero, "WorkerW", null);
+                    if (childWorker != IntPtr.Zero)
                     {
-                        var shellView = NativeMethods.FindWindowEx(toplevelHwnd, IntPtr.Zero, "SHELLDLL_DefView", null);
-                        if (shellView != IntPtr.Zero)
-                        {
-                            var sibling = NativeMethods.FindWindowEx(IntPtr.Zero, toplevelHwnd, "WorkerW", null);
-                            if (sibling != IntPtr.Zero && NativeMethods.IsWindowVisible(sibling))
-                            {
-                                workerW = sibling;
-                                return false; // Stop enumeration
-                            }
-                        }
-                        return true;
-                    }, IntPtr.Zero);
+                        workerW = childWorker;
+                    }
                 }
 
-                // 3. Fallback: Search any visible top-level WorkerW without DefView
-                if (workerW == IntPtr.Zero)
-                {
-                    NativeMethods.EnumWindows((hwnd, lParam) =>
-                    {
-                        var sb = new StringBuilder(256);
-                        NativeMethods.GetClassName(hwnd, sb, 256);
-                        if (sb.ToString() == "WorkerW" && NativeMethods.IsWindowVisible(hwnd))
-                        {
-                            var defView = NativeMethods.FindWindowEx(hwnd, IntPtr.Zero, "SHELLDLL_DefView", null);
-                            if (defView == IntPtr.Zero)
-                            {
-                                workerW = hwnd;
-                                return false; // stop enumeration
-                            }
-                        }
-                        return true;
-                    }, IntPtr.Zero);
-                }
-
-                // 4. Ultimate fallback: Progman itself
+                // Ultimate fallback: Progman itself
                 _workerW = workerW != IntPtr.Zero ? workerW : _progman;
+                LogBridge($"InitializeWorkerW: _workerW=0x{_workerW.ToInt64():X}, Progman=0x{_progman.ToInt64():X}");
                 return _workerW != IntPtr.Zero;
             }
         }
@@ -145,10 +156,38 @@ namespace AuraWallpaper.Core.Native
             }
 
             if (_workerW == IntPtr.Zero)
+            {
+                LogBridge("AttachToDesktop: _workerW is Zero!");
                 return false;
+            }
+
+            // Ensure WorkerW covers the entire virtual screen bounds so multi-monitor child windows are never clipped
+            var vBounds = DisplayManager.Instance.GetVirtualScreenBounds();
+            IntPtr parent = NativeMethods.GetParent(_workerW);
+            int targetX = vBounds.X;
+            int targetY = vBounds.Y;
+
+            if (parent != IntPtr.Zero)
+            {
+                // WorkerW is a child window (e.g. child of Progman). SetWindowPos requires parent client coordinates!
+                var ptV = new NativeMethods.POINT { x = vBounds.X, y = vBounds.Y };
+                NativeMethods.ScreenToClient(parent, ref ptV);
+                targetX = ptV.x;
+                targetY = ptV.y;
+            }
+
+            NativeMethods.SetWindowPos(
+                _workerW,
+                IntPtr.Zero,
+                targetX,
+                targetY,
+                vBounds.Width,
+                vBounds.Height,
+                NativeMethods.SWP_NOZORDER | NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_SHOWWINDOW | NativeMethods.SWP_FRAMECHANGED
+            );
 
             // Set parent to WorkerW (or Progman)
-            NativeMethods.SetParent(windowHwnd, _workerW);
+            IntPtr oldParent = NativeMethods.SetParent(windowHwnd, _workerW);
 
             // Set styles: WS_CHILD, remove WS_POPUP, ensure toolwindow and no-activate
             IntPtr currentStyle = NativeMethods.GetWindowLongPtr(windowHwnd, NativeMethods.GWL_STYLE);
@@ -161,18 +200,26 @@ namespace AuraWallpaper.Core.Native
             long newExStyle = currentExStyle.ToInt64() | NativeMethods.WS_EX_TOOLWINDOW | NativeMethods.WS_EX_NOACTIVATE;
             NativeMethods.SetWindowLongPtr(windowHwnd, NativeMethods.GWL_EXSTYLE, new IntPtr(newExStyle));
 
-            // Set position and size
-            NativeMethods.SetWindowPos(
+            // Convert screen coordinates (x, y) to WorkerW parent client coordinates using ScreenToClient
+            var pt = new NativeMethods.POINT { x = x, y = y };
+            NativeMethods.ScreenToClient(_workerW, ref pt);
+            int clientX = pt.x;
+            int clientY = pt.y;
+
+            // Set position and size inside WorkerW
+            IntPtr insertAfter = (_workerW == _progman) ? NativeMethods.HWND_BOTTOM : IntPtr.Zero;
+            bool posResult = NativeMethods.SetWindowPos(
                 windowHwnd,
-                NativeMethods.HWND_BOTTOM,
-                x,
-                y,
+                insertAfter,
+                clientX,
+                clientY,
                 width,
                 height,
                 NativeMethods.SWP_SHOWWINDOW | NativeMethods.SWP_NOACTIVATE | NativeMethods.SWP_FRAMECHANGED
             );
 
             NativeMethods.ShowWindow(windowHwnd, NativeMethods.SW_SHOW);
+            LogBridge($"AttachToDesktop: hwnd=0x{windowHwnd.ToInt64():X}, parent=0x{_workerW.ToInt64():X}, oldParent=0x{oldParent.ToInt64():X}, screen=({x},{y},{width},{height}), client=({clientX},{clientY}), posResult={posResult}");
 
             return true;
         }

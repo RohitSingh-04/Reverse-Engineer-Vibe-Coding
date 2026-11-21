@@ -1,0 +1,56 @@
+[2026-11-20T16:30:11.6479582Z] Player.Web Application_Startup: Args = --url C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\assets\DefaultWallpapers\CyberMatrix\index.html --x 0 --y 0 --w 1920 --h 1080 --mon 0 --vol 80 --mute false
+[2026-11-20T16:30:12.6060546Z] InitializeWebViewAsync enter for url: C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\assets\DefaultWallpapers\CyberMatrix\index.html
+[2026-11-20T16:30:12.6071961Z] Using WebView2 dataFolder: C:\Users\rsing\AppData\Local\AuraWallpaper\WebView2Data_mon0
+[2026-11-20T16:30:13.0745039Z] WebView2 initialized successfully
+[2026-11-20T16:33:14.5137408Z] Player.Web Application_Startup: Args = --url C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\assets\DefaultWallpapers\CyberMatrix\index.html --x 0 --y 0 --w 1920 --h 1080 --mon 0 --vol 80 --mute false
+[2026-11-20T16:33:15.2532425Z] InitializeWebViewAsync enter for url: C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\assets\DefaultWallpapers\CyberMatrix\index.html
+[2026-11-20T16:33:15.2540866Z] Using WebView2 dataFolder: C:\Users\rsing\AppData\Local\AuraWallpaper\WebView2Data_mon0
+[2026-11-20T16:33:15.6416467Z] WebView2 initialized successfully
+[2026-11-20T16:34:57.3220817Z] Player.Web Application_Startup: Args = --url C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\assets\DefaultWallpapers\CyberMatrix\index.html --x 0 --y 0 --w 1920 --h 1080 --mon 0 --vol 80 --mute false
+[2026-11-20T16:34:58.0643481Z] InitializeWebViewAsync enter for url: C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\assets\DefaultWallpapers\CyberMatrix\index.html
+[2026-11-20T16:34:58.0652281Z] Using WebView2 dataFolder: C:\Users\rsing\AppData\Local\AuraWallpaper\WebView2Data_mon0
+[2026-11-20T16:34:58.5456706Z] WebView2 initialized successfully
+[2026-11-20T16:36:39.3039493Z] Player.Web Application_Startup: Args = --url C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\assets\DefaultWallpapers\CyberMatrix\index.html --x 0 --y 0 --w 1920 --h 1080 --mon 0 --vol 80 --mute false
+[2026-11-20T16:36:40.0269201Z] InitializeWebViewAsync enter for url: C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\assets\DefaultWallpapers\CyberMatrix\index.html
+[2026-11-20T16:36:40.0280542Z] Using WebView2 dataFolder: C:\Users\rsing\AppData\Local\AuraWallpaper\WebView2Data_mon0
+[2026-11-20T16:36:40.5083252Z] WebView2 initialized successfully
+[2026-11-20T16:38:03.0211794Z] Player.Web Application_Startup: Args = --url C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\assets\DefaultWallpapers\CyberMatrix\index.html --x 0 --y 0 --w 1920 --h 1080 --mon 0 --vol 80 --mute false
+[2026-11-20T16:38:03.8715238Z] InitializeWebViewAsync enter for url: C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\assets\DefaultWallpapers\CyberMatrix\index.html
+[2026-11-20T16:38:03.8724135Z] Using WebView2 dataFolder: C:\Users\rsing\AppData\Local\AuraWallpaper\WebView2Data_mon0
+[2026-11-20T16:38:04.4570027Z] WebView2 initialized successfully
+[2026-11-20T16:53:30.9749118Z] Player.Web Application_Startup: Args = --url C:\Users\rsing\AppData\Local\AuraWallpaper\Library\30081c58a22946f8af4bf8f81f0d978a\index.html --x 0 --y 0 --w 1920 --h 1080 --mon 0 --vol 80 --mute False
+[2026-11-20T16:53:30.9934187Z] Player.Web Application_Startup: Args = --url C:\Users\rsing\AppData\Local\AuraWallpaper\Library\0bfba245ec054a5aafed230f2e5a44cd\index.html --x -2400 --y 0 --w 2400 --h 1350 --mon 1 --vol 80 --mute False
+[2026-11-20T16:53:31.9931994Z] InitializeWebViewAsync enter for url: C:\Users\rsing\AppData\Local\AuraWallpaper\Library\30081c58a22946f8af4bf8f81f0d978a\index.html
+[2026-11-20T16:53:31.9945216Z] Using WebView2 dataFolder: C:\Users\rsing\AppData\Local\AuraWallpaper\WebView2Data_mon0
+[2026-11-20T16:53:32.0020852Z] InitializeWebViewAsync enter for url: C:\Users\rsing\AppData\Local\AuraWallpaper\Library\0bfba245ec054a5aafed230f2e5a44cd\index.html
+[2026-11-20T16:53:32.0035137Z] Using WebView2 dataFolder: C:\Users\rsing\AppData\Local\AuraWallpaper\WebView2Data_mon1
+[2026-11-20T16:53:32.5030930Z] WebView2 initialized successfully
+[2026-11-20T16:53:32.5123360Z] WebView2 initialized successfully
+[2026-11-20T16:57:00.1426858Z] Player.Web Application_Startup: Args = --url C:\Users\rsing\AppData\Local\AuraWallpaper\Library\bae6e680fee64d17ba791f22a1d15834\index.html --x 0 --y 0 --w 1920 --h 1080 --mon 0 --vol 80 --mute False
+[2026-11-20T16:57:00.1436624Z] Player.Web Application_Startup: Args = --url C:\Users\rsing\AppData\Local\AuraWallpaper\Library\bae6e680fee64d17ba791f22a1d15834\index.html --x -2400 --y 0 --w 2400 --h 1350 --mon 1 --vol 80 --mute False
+[2026-11-20T16:57:01.1667135Z] InitializeWebViewAsync enter for url: C:\Users\rsing\AppData\Local\AuraWallpaper\Library\bae6e680fee64d17ba791f22a1d15834\index.html
+[2026-11-20T16:57:01.1676656Z] Using WebView2 dataFolder: C:\Users\rsing\AppData\Local\AuraWallpaper\WebView2Data_mon0
+[2026-11-20T16:57:01.1693827Z] InitializeWebViewAsync enter for url: C:\Users\rsing\AppData\Local\AuraWallpaper\Library\bae6e680fee64d17ba791f22a1d15834\index.html
+[2026-11-20T16:57:01.1706023Z] Using WebView2 dataFolder: C:\Users\rsing\AppData\Local\AuraWallpaper\WebView2Data_mon1
+[2026-11-20T16:57:01.7033533Z] WebView2 initialized successfully
+[2026-11-20T16:57:01.7268691Z] WebView2 initialized successfully
+[2026-11-20T17:02:15.4128976Z] Player.Web Application_Startup: Args = --url C:\Users\rsing\AppData\Local\AuraWallpaper\Library\1b00a356c72a4d4594c89033dacc456a\index.html --x 0 --y 0 --w 1920 --h 1080 --mon 0 --vol 80 --mute False
+[2026-11-20T17:02:16.2855247Z] InitializeWebViewAsync enter for url: C:\Users\rsing\AppData\Local\AuraWallpaper\Library\1b00a356c72a4d4594c89033dacc456a\index.html
+[2026-11-20T17:02:16.2867820Z] Using WebView2 dataFolder: C:\Users\rsing\AppData\Local\AuraWallpaper\WebView2Data_mon0
+[2026-11-20T17:02:16.7854210Z] WebView2 initialized successfully
+[2026-11-20T17:03:06.5657141Z] Player.Web Application_Startup: Args = --url C:\Users\rsing\AppData\Local\AuraWallpaper\Library\ad4afce7f2ae40f88dee76e4f7b77b38\index.html --x -2400 --y 0 --w 2400 --h 1350 --mon 1 --vol 80 --mute False
+[2026-11-20T17:03:07.3626368Z] InitializeWebViewAsync enter for url: C:\Users\rsing\AppData\Local\AuraWallpaper\Library\ad4afce7f2ae40f88dee76e4f7b77b38\index.html
+[2026-11-20T17:03:07.3637957Z] Using WebView2 dataFolder: C:\Users\rsing\AppData\Local\AuraWallpaper\WebView2Data_mon1
+[2026-11-20T17:03:07.7547316Z] WebView2 initialized successfully
+[2026-11-20T17:04:46.8686224Z] Player.Web Application_Startup: Args = --url C:\Users\rsing\AppData\Local\AuraWallpaper\Library\d47216a8fda348be9138b36408d02df3\index.html --x -2400 --y 0 --w 4320 --h 1350 --mon -1 --vol 80 --mute False
+[2026-11-20T17:04:47.7170992Z] InitializeWebViewAsync enter for url: C:\Users\rsing\AppData\Local\AuraWallpaper\Library\d47216a8fda348be9138b36408d02df3\index.html
+[2026-11-20T17:04:47.7190957Z] Using WebView2 dataFolder: C:\Users\rsing\AppData\Local\AuraWallpaper\WebView2Data_mon-1
+[2026-11-20T17:04:48.1784588Z] WebView2 initialized successfully
+[2026-11-20T17:06:31.6497044Z] Player.Web Application_Startup: Args = --url C:\Users\rsing\AppData\Local\AuraWallpaper\Library\d54866b1231c461f88acf14c70def9ea\index.html --x 0 --y 0 --w 1920 --h 1080 --mon 0 --vol 80 --mute False
+[2026-11-20T17:06:31.6739430Z] Player.Web Application_Startup: Args = --url C:\Users\rsing\AppData\Local\AuraWallpaper\Library\d54866b1231c461f88acf14c70def9ea\index.html --x -2400 --y 0 --w 2400 --h 1350 --mon 1 --vol 80 --mute False
+[2026-11-20T17:06:32.6171040Z] InitializeWebViewAsync enter for url: C:\Users\rsing\AppData\Local\AuraWallpaper\Library\d54866b1231c461f88acf14c70def9ea\index.html
+[2026-11-20T17:06:32.6183686Z] Using WebView2 dataFolder: C:\Users\rsing\AppData\Local\AuraWallpaper\WebView2Data_mon0
+[2026-11-20T17:06:32.6288071Z] InitializeWebViewAsync enter for url: C:\Users\rsing\AppData\Local\AuraWallpaper\Library\d54866b1231c461f88acf14c70def9ea\index.html
+[2026-11-20T17:06:32.6300229Z] Using WebView2 dataFolder: C:\Users\rsing\AppData\Local\AuraWallpaper\WebView2Data_mon1
+[2026-11-20T17:06:33.1454516Z] WebView2 initialized successfully
+[2026-11-20T17:06:33.1501887Z] WebView2 initialized successfully

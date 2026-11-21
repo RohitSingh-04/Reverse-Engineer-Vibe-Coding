@@ -1,5 +1,5 @@
 ﻿AuraWallpaper.Player.Media
-
+1.0.0.0
 
 winexe
 C#
@@ -9,12 +9,12 @@ AuraWallpaper.Player.Media
 none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
-C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\src\AuraWallpaper.Player.Media\App.xaml
-11407045341
 
-31822776871
+2-1094938431
+
+4-1485469899
 219311905172
-MainWindow.xaml;
+MainWindow.xaml;App.xaml;
 
 False
 

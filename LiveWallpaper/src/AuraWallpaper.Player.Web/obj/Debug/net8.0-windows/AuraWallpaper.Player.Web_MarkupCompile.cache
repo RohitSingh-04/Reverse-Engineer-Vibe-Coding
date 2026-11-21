@@ -1,5 +1,5 @@
 ﻿AuraWallpaper.Player.Web
-
+1.0.0.0
 
 winexe
 C#
@@ -9,12 +9,12 @@ AuraWallpaper.Player.Web
 none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
-C:\Users\rsing\OneDrive\Desktop\ReverseEngineering\LiveWallpaper\src\AuraWallpaper.Player.Web\App.xaml
-11407045341
+
+2-1094938431
 3787257106
-3599320386
+41586040912
 222-328556029
-MainWindow.xaml;
+MainWindow.xaml;App.xaml;
 
 False
 

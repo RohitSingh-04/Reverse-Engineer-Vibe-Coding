@@ -75,7 +75,7 @@ namespace AuraWallpaper.Screensaver {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/AuraScreensaver;component/screensaverconfigwindow.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/AuraScreensaver;V1.0.0.0;component/screensaverconfigwindow.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\ScreensaverConfigWindow.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

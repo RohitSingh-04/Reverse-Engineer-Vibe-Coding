@@ -48,14 +48,8 @@
             </Grid.ColumnDefinitions>
 
             <!-- Search box (Row 0, Left) -->
-            <TextBox x:Name="SearchBox" Grid.Row="0" Grid.Column="0" Height="34" Width="260" MaxWidth="320" HorizontalAlignment="Left"
+            <TextBox x:Name="SearchBox" Grid.Row="0" Grid.ColumnSpan="2" Height="34" Width="320" HorizontalAlignment="Left"
                      TextChanged="SearchBox_TextChanged" Text="" Tag="Search wallpapers..."/>
-
-            <!-- Monitor Selector Dropdown (Row 0, Right) -->
-            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="12,0,0,0">
-                <TextBlock Text="Target Display:" VerticalAlignment="Center" Foreground="{DynamicResource TextSecondary}" Margin="0,0,8,0" FontSize="12"/>
-                <ComboBox x:Name="MonitorTargetCombo" Width="190" Height="34"/>
-            </StackPanel>
 
             <!-- Filter chips in a responsive WrapPanel (Row 1) -->
             <WrapPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,12,0,0" VerticalAlignment="Center">
@@ -96,15 +90,17 @@
                                 </Border.Style>
                                 <Border.ContextMenu>
                                     <ContextMenu>
-                                        <MenuItem Header="Apply to Selected Monitor" Click="MenuApply_Click"/>
-                                        <MenuItem Header="Apply (Span across all displays)" Click="MenuSpan_Click"/>
-                                        <MenuItem Header="Apply (Duplicate on all displays)" Click="MenuDuplicate_Click"/>
+                                        <MenuItem Header="▶ Apply Wallpaper" Click="MenuApply_Click"/>
                                         <Separator/>
-                                        <MenuItem Header="Customize Properties" Click="MenuCustomize_Click"/>
-                                        <MenuItem Header="Toggle Favorite" Click="MenuFavorite_Click"/>
-                                        <MenuItem Header="Export as Package (.aurapkg)" Click="MenuExport_Click"/>
+                                        <MenuItem Header="🔁 Duplicate on All Displays" Click="MenuDuplicate_Click"/>
+                                        <MenuItem Header="🖥️ Extend / Span Cropped Across Displays" Click="MenuSpanCropped_Click"/>
+                                        <MenuItem Header="✨ Extend / Span Fit (Ambient Glow)" Click="MenuSpanFit_Click"/>
                                         <Separator/>
-                                        <MenuItem Header="Delete from Library" Click="MenuDelete_Click"/>
+                                        <MenuItem Header="⚙ Customize Properties" Click="MenuCustomize_Click"/>
+                                        <MenuItem Header="⭐ Toggle Favorite" Click="MenuFavorite_Click"/>
+                                        <MenuItem Header="📦 Export as Package (.aurapkg)" Click="MenuExport_Click"/>
+                                        <Separator/>
+                                        <MenuItem Header="✕ Delete from Library" Click="MenuDelete_Click"/>
                                     </ContextMenu>
                                 </Border.ContextMenu>
                                 <Grid>
@@ -157,20 +153,21 @@
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
                                             <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
 
                                         <!-- Apply Wallpaper Button with Play Icon -->
                                         <Button Grid.Column="0" Height="32" Click="ApplyButton_Click"
                                                 Background="{DynamicResource AccentBlue}" Foreground="White" BorderThickness="0"
-                                                Cursor="Hand" ToolTip="Set as Active Desktop Wallpaper">
+                                                Cursor="Hand" ToolTip="Apply to Target Display">
                                             <Button.Style>
                                                 <Style TargetType="Button">
                                                     <Setter Property="Template">
                                                         <Setter.Value>
                                                             <ControlTemplate TargetType="Button">
-                                                                <Border x:Name="btnBorder" Background="{TemplateBinding Background}" CornerRadius="6" Padding="8,0">
+                                                                <Border x:Name="btnBorder" Background="{TemplateBinding Background}" CornerRadius="6" Padding="6,0">
                                                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                                        <TextBlock Text="▶" FontSize="11" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                                                                        <TextBlock Text="▶" FontSize="11" Margin="0,0,5,0" VerticalAlignment="Center"/>
                                                                         <TextBlock Text="Apply" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"/>
                                                                     </StackPanel>
                                                                 </Border>
@@ -189,9 +186,34 @@
                                             </Button.Style>
                                         </Button>
 
+                                        <!-- Multi-Display Options Menu Button -->
+                                        <Button Grid.Column="1" Width="30" Height="32" Click="ApplyMenuButton_Click"
+                                                Background="{DynamicResource ButtonBackground}" BorderThickness="0" Margin="5,0,0,0"
+                                                Cursor="Hand" ToolTip="Multi-Display Options (Duplicate, Extend Cropped, Extend Fit)">
+                                            <Button.Style>
+                                                <Style TargetType="Button">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="Button">
+                                                                <Border x:Name="mBorder" Background="{TemplateBinding Background}" BorderBrush="{DynamicResource ButtonBorder}" BorderThickness="1" CornerRadius="6">
+                                                                    <TextBlock Text="▾" FontSize="12" Foreground="{DynamicResource TextPrimary}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                </Border>
+                                                                <ControlTemplate.Triggers>
+                                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                                        <Setter TargetName="mBorder" Property="Background" Value="{DynamicResource ButtonHoverBackground}"/>
+                                                                        <Setter TargetName="mBorder" Property="BorderBrush" Value="{DynamicResource AccentBlue}"/>
+                                                                    </Trigger>
+                                                                </ControlTemplate.Triggers>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </Button.Style>
+                                        </Button>
+
                                         <!-- Customize Settings Icon Button -->
-                                        <Button Grid.Column="1" Width="36" Height="32" Click="CustomizeButton_Click"
-                                                Background="{DynamicResource ButtonBackground}" BorderThickness="0" Margin="8,0,0,0"
+                                        <Button Grid.Column="2" Width="34" Height="32" Click="CustomizeButton_Click"
+                                                Background="{DynamicResource ButtonBackground}" BorderThickness="0" Margin="5,0,0,0"
                                                 Cursor="Hand" ToolTip="Customize Wallpaper Properties">
                                             <Button.Style>
                                                 <Style TargetType="Button">
